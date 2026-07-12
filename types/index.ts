@@ -26,7 +26,7 @@ export interface ExperienceItem {
   highlights: string[];
 }
 
-export type ProjectCategory = "All" | "Web" | "AI" | "Mobile" | "Open Source";
+export type ProjectCategory = "All" | "AI/ML" | "Systems" | "Quant" | "Mobile";
 
 export interface Project {
   title: string;

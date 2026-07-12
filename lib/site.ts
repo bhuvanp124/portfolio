@@ -1,31 +1,37 @@
 /**
  * Central site configuration used across metadata, SEO, and the UI.
- * TODO: Replace every value below with your own details.
  */
 export const siteConfig = {
-  name: "Your Name",
+  name: "Bhuvan Prakash",
   role: "Software Engineer",
-  // Used for SEO/OpenGraph absolute URLs. TODO: set to your real domain before deploy.
-  url: "https://your-domain.com",
+  // Used for SEO/OpenGraph absolute URLs.
+  // TODO: set this to your real domain once deployed (e.g. your Vercel URL).
+  url: "https://bhuvanprakash.dev",
   description:
-    "Software engineer crafting fast, elegant, human-centered products for the web.",
+    "Software Engineer with strong foundations in DSA and system design. I build Android apps, AI-driven platforms, and high-performance systems.",
   locale: "en_US",
-  email: "you@example.com",
+  email: "bhuvanpdocs@gmail.com",
+  phone: "+91 7411127981",
+  location: "Bangalore, India",
   handles: {
-    github: "https://github.com/yourusername",
-    linkedin: "https://linkedin.com/in/yourusername",
-    x: "https://x.com/yourusername",
+    // TODO: Replace these with your real profile URLs.
+    github: "https://github.com/bhuvanprakash",
+    linkedin: "https://linkedin.com/in/bhuvan-prakash",
+    leetcode: "https://leetcode.com/u/bhuvanprakash",
   },
-  // Twitter/X username for twitter card metadata (with @).
-  twitter: "@yourusername",
-  // Path (in /public) to your resume PDF. TODO: drop your resume.pdf into /public.
+  // Path (in /public) to your resume PDF.
   resume: "/resume.pdf",
   keywords: [
+    "Bhuvan Prakash",
     "Software Engineer",
-    "Full Stack Developer",
-    "Next.js",
-    "React",
-    "TypeScript",
+    "Android Developer",
+    "Kotlin",
+    "Machine Learning",
+    "Data Science",
+    "Python",
+    "AWS",
+    "DSA",
+    "System Design",
     "Portfolio",
   ],
 } as const;

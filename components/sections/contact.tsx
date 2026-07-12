@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, Github, Linkedin, Mail, Send } from "lucide-react";
+import { Check, Code2, Github, Linkedin, Mail, MapPin, Send } from "lucide-react";
 import { useState } from "react";
 
 import { Reveal } from "@/components/motion/reveal";
@@ -53,12 +53,12 @@ export function Contact() {
               <Mail className="h-5 w-5 text-brand" />
               <span className="text-sm text-foreground">{siteConfig.email}</span>
             </a>
-            <div className="flex gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               <a
                 href={siteConfig.handles.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass flex flex-1 items-center gap-3 rounded-xl p-4 transition-colors hover:border-brand/40"
+                className="glass flex items-center gap-3 rounded-xl p-4 transition-colors hover:border-brand/40"
               >
                 <Github className="h-5 w-5 text-brand" />
                 <span className="text-sm text-foreground">GitHub</span>
@@ -67,11 +67,24 @@ export function Contact() {
                 href={siteConfig.handles.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass flex flex-1 items-center gap-3 rounded-xl p-4 transition-colors hover:border-brand/40"
+                className="glass flex items-center gap-3 rounded-xl p-4 transition-colors hover:border-brand/40"
               >
                 <Linkedin className="h-5 w-5 text-brand" />
                 <span className="text-sm text-foreground">LinkedIn</span>
               </a>
+              <a
+                href={siteConfig.handles.leetcode}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass flex items-center gap-3 rounded-xl p-4 transition-colors hover:border-brand/40"
+              >
+                <Code2 className="h-5 w-5 text-brand" />
+                <span className="text-sm text-foreground">LeetCode</span>
+              </a>
+            </div>
+            <div className="flex items-center gap-2 pl-1 text-sm text-muted">
+              <MapPin className="h-4 w-4 text-brand" />
+              {siteConfig.location}
             </div>
           </div>
         </div>

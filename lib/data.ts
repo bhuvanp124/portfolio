@@ -1,17 +1,18 @@
 import {
   Award,
-  Boxes,
+  BadgeCheck,
+  BrainCircuit,
   Braces,
   Cloud,
+  Code2,
   Database,
+  GraduationCap,
+  Globe,
   Github,
   Linkedin,
   Mail,
-  Rocket,
+  Smartphone,
   Sparkles,
-  Star,
-  Wrench,
-  BrainCircuit,
   Trophy,
 } from "lucide-react";
 
@@ -45,6 +46,7 @@ export const navItems: NavItem[] = [
 export const socialLinks: SocialLink[] = [
   { label: "GitHub", href: siteConfig.handles.github, icon: Github },
   { label: "LinkedIn", href: siteConfig.handles.linkedin, icon: Linkedin },
+  { label: "LeetCode", href: siteConfig.handles.leetcode, icon: Code2 },
   { label: "Email", href: `mailto:${siteConfig.email}`, icon: Mail },
 ];
 
@@ -52,19 +54,19 @@ export const socialLinks: SocialLink[] = [
 /*  About                                                                     */
 /* -------------------------------------------------------------------------- */
 
-// TODO: Rewrite this to your own story.
 export const about = {
-  headline: "I design and build software that feels effortless.",
+  headline:
+    "I engineer software from the algorithm up — mobile apps, AI platforms, and high-throughput systems.",
   paragraphs: [
-    "I'm a software engineer who recently graduated in 2026, focused on building performant, accessible, and beautiful products across the full stack.",
-    "I care about the details most people never notice — the easing curve on a transition, the empty state, the millisecond a page takes to feel alive. I believe great engineering and great design are the same discipline.",
-    "Currently seeking full-time software engineering roles where I can ship products used by real people.",
+    "I'm a Software Engineer with strong foundations in Data Structures, Algorithms, and System Design. I'm currently interning as an Android Developer at MindMatrix, building a Kotlin-based application end to end.",
+    "I love working across the stack — from crafting Material Design UIs and integrating REST APIs, to architecting AI-driven solutions with Python and AWS, to squeezing performance out of low-level C++ systems.",
+    "Graduating in 2026 with a B.E. in Computer Science (Data Science). I'm passionate about mobile development, machine learning, competitive programming, and quantitative analysis.",
   ],
   stats: [
-    { value: "15+", label: "Projects shipped" },
-    { value: "3", label: "Internships" },
-    { value: "1.2k+", label: "GitHub contributions" },
-    { value: "∞", label: "Cups of coffee" },
+    { value: "400+", label: "DSA problems solved" },
+    { value: "8.20", label: "CGPA / 10" },
+    { value: "3+", label: "Flagship projects" },
+    { value: "2026", label: "Graduating" },
   ],
 };
 
@@ -72,37 +74,45 @@ export const about = {
 /*  Skills                                                                    */
 /* -------------------------------------------------------------------------- */
 
-// TODO: Adjust categories and skills to reflect your real stack.
 export const skillCategories: SkillCategory[] = [
   {
     title: "Languages",
     icon: Braces,
-    skills: ["TypeScript", "JavaScript", "Python", "Go", "Java", "SQL"],
+    skills: ["Java", "Kotlin", "Python", "C++", "R", "SQL", "JavaScript"],
   },
   {
-    title: "Frameworks",
-    icon: Boxes,
-    skills: ["React", "Next.js", "Node.js", "Express", "FastAPI", "Tailwind"],
+    title: "Mobile",
+    icon: Smartphone,
+    skills: ["Android SDK", "Kotlin", "Material Design", "REST API Integration"],
   },
   {
-    title: "Cloud",
-    icon: Cloud,
-    skills: ["Vercel", "AWS", "Docker", "Kubernetes", "Cloudflare"],
-  },
-  {
-    title: "AI",
+    title: "Data Science & AI",
     icon: BrainCircuit,
-    skills: ["OpenAI", "LangChain", "RAG", "Embeddings", "PyTorch"],
+    skills: [
+      "TensorFlow",
+      "PyTorch",
+      "Scikit-Learn",
+      "Pandas",
+      "NumPy",
+      "NLP",
+      "LLMs",
+      "OpenCV",
+    ],
+  },
+  {
+    title: "Web & Backend",
+    icon: Globe,
+    skills: ["Flask", "Streamlit", "HTML5", "CSS3", "REST APIs"],
+  },
+  {
+    title: "Cloud & DevOps",
+    icon: Cloud,
+    skills: ["AWS (EC2, S3)", "Docker", "Git", "GitHub", "Google AI Studio"],
   },
   {
     title: "Databases",
     icon: Database,
-    skills: ["PostgreSQL", "MongoDB", "Redis", "Prisma", "Supabase"],
-  },
-  {
-    title: "Tools",
-    icon: Wrench,
-    skills: ["Git", "Figma", "Linear", "Vitest", "Playwright", "CI/CD"],
+    skills: ["MySQL", "MongoDB"],
   },
 ];
 
@@ -110,41 +120,39 @@ export const skillCategories: SkillCategory[] = [
 /*  Experience                                                                */
 /* -------------------------------------------------------------------------- */
 
-// TODO: Replace with your real experience.
 export const experience: ExperienceItem[] = [
   {
-    role: "Software Engineering Intern",
-    company: "Acme Corp",
-    period: "Summer 2025",
-    location: "San Francisco, CA",
+    role: "Software Engineer Intern",
+    company: "MindMatrix",
+    period: "Dec 2025 – Present",
+    location: "Bangalore, India",
     summary:
-      "Owned a customer-facing feature end to end on the growth team.",
+      "Building a Kotlin-based Android application, contributing across the full development lifecycle.",
     highlights: [
-      "Built a real-time analytics dashboard used by 5k+ weekly users.",
-      "Cut page load time by 42% through code-splitting and caching.",
-      "Shipped an A/B tested onboarding flow that lifted activation 18%.",
+      "Building an Android application using Kotlin, contributing across the full development lifecycle.",
+      "Implementing UI/UX screens following Material Design guidelines and exploring Google AI Studio for AI-assisted features.",
+      "Integrating REST APIs for backend communication and optimizing app performance by resolving crashes and improving stability.",
     ],
   },
   {
-    role: "Open Source Contributor",
-    company: "Various Projects",
-    period: "2024 — Present",
-    location: "Remote",
-    summary: "Contributing to developer tooling and UI libraries.",
+    role: "B.E. in Computer Science (Data Science)",
+    company: "RNS Institute of Technology",
+    period: "Dec 2022 – June 2026",
+    location: "Bangalore, India",
+    summary: "CGPA: 8.20 / 10.0.",
     highlights: [
-      "Merged 30+ PRs across popular TypeScript repositories.",
-      "Authored documentation and examples used by thousands of devs.",
+      "Focus on Data Structures & Algorithms, System Design, and Machine Learning.",
+      "Active hackathon participant with a strong competitive-programming record.",
     ],
   },
   {
-    role: "B.S. in Computer Science",
-    company: "Your University",
-    period: "2022 — 2026",
-    location: "City, Country",
-    summary: "Graduated with focus on systems and human-computer interaction.",
+    role: "Pre-University Education (PCMB)",
+    company: "Expert PU College",
+    period: "Jun 2020 – Mar 2022",
+    location: "Mangalore, India",
+    summary: "Scored 92% in Physics, Chemistry, Mathematics & Biology.",
     highlights: [
-      "Relevant coursework: Distributed Systems, Algorithms, HCI, ML.",
-      "President of the coding club; led 3 hackathon-winning teams.",
+      "Built the mathematical and analytical foundation for an engineering career.",
     ],
   },
 ];
@@ -153,58 +161,52 @@ export const experience: ExperienceItem[] = [
 /*  Projects                                                                  */
 /* -------------------------------------------------------------------------- */
 
-// TODO: Replace with your real projects and drop images into /public/projects.
 export const projects: Project[] = [
   {
-    title: "Nebula Analytics",
+    title: "High-Throughput Application Load Balancer",
     description:
-      "A real-time analytics platform with sub-second dashboards, anomaly detection, and collaborative reporting.",
-    image: "/projects/project-1.svg",
-    categories: ["Web", "AI"],
-    tech: ["Next.js", "TypeScript", "PostgreSQL", "Redis", "OpenAI"],
+      "A Layer 7 load balancer in C++ handling 10k+ concurrent requests/second with minimal latency using non-blocking I/O and multithreaded request handling.",
+    image: "/projects/load-balancer.svg",
+    categories: ["Systems"],
+    tech: ["C++", "Socket Programming", "Multithreading", "Non-blocking I/O"],
     features: [
-      "Real-time streaming charts",
-      "AI-powered anomaly detection",
-      "Role-based access control",
+      "10k+ concurrent requests/second",
+      "Round-Robin & Least-Connection routing",
+      "Active health checks & automatic failover (99.9% availability)",
     ],
-    github: "https://github.com/yourusername/nebula",
-    demo: "https://example.com",
+    // TODO: add your GitHub / live demo links.
+    github: siteConfig.handles.github,
     featured: true,
   },
   {
-    title: "Orbit Chat",
+    title: "Adaptive Interview Training Platform",
     description:
-      "An end-to-end encrypted messaging app with presence, typing indicators, and offline-first sync.",
-    image: "/projects/project-2.svg",
-    categories: ["Web", "Mobile"],
-    tech: ["React", "Node.js", "WebSocket", "MongoDB"],
-    features: ["E2E encryption", "Offline-first sync", "Cross-platform"],
-    github: "https://github.com/yourusername/orbit",
-    demo: "https://example.com",
+      "An AI-powered interview simulator that uses LLMs to generate dynamic, context-aware technical questions tailored to each candidate's responses.",
+    image: "/projects/interview-platform.svg",
+    categories: ["AI/ML"],
+    tech: ["Python", "NLP", "LLMs", "OpenCV", "AWS (EC2, S3)"],
+    features: [
+      "Context-aware question generation via LLMs",
+      "Real-time sentiment & facial-expression feedback loop",
+      "Deployed on AWS with low-latency REST APIs",
+    ],
+    github: siteConfig.handles.github,
     featured: true,
   },
   {
-    title: "Prism UI",
+    title: "Crypto Quant Backtesting Engine",
     description:
-      "An open-source, accessible React component library with 60+ headless primitives and theming.",
-    image: "/projects/project-3.svg",
-    categories: ["Open Source", "Web"],
-    tech: ["React", "TypeScript", "Radix", "Tailwind"],
-    features: ["60+ components", "WCAG AA compliant", "Fully themeable"],
-    github: "https://github.com/yourusername/prism",
-    demo: "https://example.com",
+      "An event-driven backtesting engine to simulate high-frequency trading strategies on minute-level OHLCV data, with rigorous risk validation.",
+    image: "/projects/quant-engine.svg",
+    categories: ["Quant"],
+    tech: ["Python", "Pandas", "NumPy"],
+    features: [
+      "Event-driven HFT strategy simulation",
+      "60% faster execution via vectorized NumPy",
+      "Sharpe Ratio & Max Drawdown risk metrics",
+    ],
+    github: siteConfig.handles.github,
     featured: true,
-  },
-  {
-    title: "Atlas Search",
-    description:
-      "A semantic search engine over documents using embeddings and a hybrid ranking model.",
-    image: "/projects/project-4.svg",
-    categories: ["AI"],
-    tech: ["Python", "FastAPI", "PyTorch", "Postgres"],
-    features: ["Vector + keyword hybrid", "Streaming answers", "Citations"],
-    github: "https://github.com/yourusername/atlas",
-    demo: "https://example.com",
   },
 ];
 
@@ -212,42 +214,40 @@ export const projects: Project[] = [
 /*  Achievements                                                              */
 /* -------------------------------------------------------------------------- */
 
-// TODO: Replace with your real achievements.
 export const achievements: Achievement[] = [
   {
-    title: "1st Place — National Hackathon",
-    description: "Led a team of 4 to build an award-winning accessibility tool in 36 hours.",
-    icon: Trophy,
-    date: "2025",
+    title: "400+ DSA Problems Solved",
+    description:
+      "Across LeetCode, Codeforces, and CSES — with a strong focus on dynamic programming and graph algorithms.",
+    icon: Code2,
   },
   {
-    title: "Dean's List",
-    description: "Recognized for academic excellence across multiple semesters.",
-    icon: Award,
-    date: "2023 — 2026",
-  },
-  {
-    title: "Open Source Star",
-    description: "A personal project crossed 1,000 GitHub stars from the developer community.",
-    icon: Star,
-    date: "2024",
-  },
-  {
-    title: "Top Intern Award",
-    description: "Recognized as a top-performing intern for shipping high-impact features.",
-    icon: Rocket,
-    date: "2025",
-  },
-  {
-    title: "Published Writer",
-    description: "Wrote technical articles on web performance read by 50k+ developers.",
+    title: "Salesforce Agentblazer",
+    description:
+      "Earned Trailhead points as an Agentblazer, gaining exposure to AI agent and CRM workflows.",
     icon: Sparkles,
-    date: "2024 — Present",
   },
   {
-    title: "Certified Cloud Practitioner",
-    description: "Earned cloud certification demonstrating architecture fundamentals.",
-    icon: Cloud,
-    date: "2025",
+    title: "NPTEL — Data Science for Engineers",
+    description:
+      "Earned the Elite certification in the NPTEL Data Science for Engineers program.",
+    icon: Award,
+  },
+  {
+    title: "Google Project Management",
+    description: "Completed the Google Project Management certificate on Coursera.",
+    icon: BadgeCheck,
+  },
+  {
+    title: "Team Captain & Hackathons",
+    description:
+      "Captained the school football team and remain an active hackathon participant.",
+    icon: Trophy,
+  },
+  {
+    title: "8.20 / 10 CGPA",
+    description:
+      "Maintaining a strong academic record in B.E. Computer Science (Data Science).",
+    icon: GraduationCap,
   },
 ];

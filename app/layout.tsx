@@ -34,7 +34,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${siteConfig.name} — ${siteConfig.role}`,
     description: siteConfig.description,
-    creator: siteConfig.twitter,
   },
   robots: {
     index: true,
@@ -67,7 +66,12 @@ export default function RootLayout({
     jobTitle: siteConfig.role,
     url: siteConfig.url,
     email: siteConfig.email,
-    sameAs: [siteConfig.handles.github, siteConfig.handles.linkedin, siteConfig.handles.x],
+    address: { "@type": "PostalAddress", addressLocality: siteConfig.location },
+    sameAs: [
+      siteConfig.handles.github,
+      siteConfig.handles.linkedin,
+      siteConfig.handles.leetcode,
+    ],
   };
 
   return (

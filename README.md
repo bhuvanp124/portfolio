@@ -1,55 +1,107 @@
-# My Portfolio
+<div align="center">
 
-A single-file, dependency-free personal portfolio website. Just `index.html` — open it in a browser to preview, edit the text to make it yours, then deploy.
+# ✦ Portfolio
 
-## ✏️ How to customize
+**A world-class, production-grade developer portfolio.**
+Built with Next.js 15, TypeScript, Tailwind CSS, shadcn/ui, and Framer Motion.
 
-Open `index.html` and search-and-replace these placeholders:
+Dark-first · Fully responsive · Accessible · SEO-optimized · Deploy-ready for Vercel.
 
-| Placeholder | Replace with |
-|---|---|
-| `Your Name` | Your actual name |
-| `you@example.com` | Your email |
-| `yourusername` (GitHub/LinkedIn) | Your usernames |
-| Project One–Four | Your real projects + links |
-| Experience items | Your internships / education |
-| `/resume.pdf` | Drop a `resume.pdf` in this folder |
+</div>
 
-Colors live in the `:root { ... }` CSS variables near the top. Change `--accent` to rebrand the whole site.
+---
 
-## 🚀 Deploy (pick ONE — all free)
+## ✨ Features
 
-### Option A — GitHub Pages (recommended, gives you a free URL)
-1. Create a new repo on github.com (e.g. `portfolio`).
-2. Push this folder (commands below).
-3. Repo → **Settings → Pages** → Source: `main` branch, `/root` → **Save**.
-4. Live in ~1 min at `https://YOURUSERNAME.github.io/portfolio/`.
+- **Premium, handcrafted design** — glassmorphism, soft gradients, animated blobs, grid backgrounds.
+- **Buttery animations** — page fade-in, scroll reveals, hover lift, animated navbar underline, gradient borders (Framer Motion, reduced-motion aware).
+- **Command palette** — press `⌘K` / `Ctrl K` to jump anywhere.
+- **Interactive extras** — scroll progress bar, back-to-top, custom intro loader, mouse spotlight, subtle particle field.
+- **Sections** — Hero, About, Skills, Experience (timeline), Featured Projects (with filtering), Achievements, Résumé CTA, Contact form.
+- **SEO built-in** — metadata, Open Graph + Twitter cards, **auto-generated OG image**, `robots.txt`, `sitemap.xml`, JSON-LD structured data, web manifest.
+- **Accessible** — semantic HTML, keyboard navigation, skip link, focus states, ARIA labels, AA contrast.
+- **Fast** — static rendering, dynamic imports for below-the-fold sections, `next/image`, `next/font` (Geist).
 
-### Option B — Netlify or Vercel (drag-and-drop)
-- Go to [netlify.com/drop](https://app.netlify.com/drop) or [vercel.com](https://vercel.com), and drag this folder in. Instant live URL.
+## 🧱 Tech Stack
 
-## 🌐 Add a custom domain (e.g. yourname.com)
+| Layer      | Choice                                    |
+| ---------- | ----------------------------------------- |
+| Framework  | Next.js 15 (App Router)                   |
+| Language   | TypeScript (strict)                       |
+| Styling    | Tailwind CSS + CSS variables              |
+| Components | shadcn/ui-style primitives (hand-authored)|
+| Animation  | Framer Motion                             |
+| Icons      | Lucide                                    |
+| Fonts      | Geist Sans + Geist Mono (`next/font`)     |
 
-1. **Buy a domain** from Namecheap, Cloudflare, Porkbun, or Google Domains (~$10/yr).
-2. **Point it at your host:**
-   - **GitHub Pages:** In your registrar's DNS, add these `A` records for the apex domain:
-     ```
-     185.199.108.153
-     185.199.109.153
-     185.199.110.153
-     185.199.111.153
-     ```
-     and a `CNAME` record for `www` → `YOURUSERNAME.github.io`.
-     Then in repo **Settings → Pages → Custom domain**, enter `yourname.com` and check **Enforce HTTPS**.
-   - **Netlify/Vercel:** Just add the domain in the dashboard — it shows you the exact DNS records to paste.
-3. DNS can take a few minutes to a few hours to go live. HTTPS is automatic and free.
-
-## 📤 Push to GitHub
+## 🚀 Getting Started
 
 ```bash
-git add .
-git commit -m "Initial portfolio"
-git branch -M main
-git remote add origin https://github.com/YOURUSERNAME/portfolio.git
-git push -u origin main
+npm install
+npm run dev      # http://localhost:3000
 ```
+
+Build & run production locally:
+
+```bash
+npm run build
+npm run start
+```
+
+## 🎨 Customize everything
+
+All content lives in **two files** — edit these first:
+
+1. **`lib/site.ts`** — your name, role, email, domain, social links, résumé path, SEO keywords.
+2. **`lib/data.ts`** — nav items, about text, skills, experience, projects, achievements.
+
+Every placeholder is marked with a `// TODO` comment. Then:
+
+- **Résumé** — replace `public/resume.pdf` with your real PDF.
+- **Project images** — drop screenshots into `public/projects/` and update the `image` paths in `lib/data.ts`. (Remove the `unoptimized` prop in `components/sections/projects.tsx` once you use real raster images to enable `next/image` optimization.)
+- **Favicon / logo mark** — edit `public/icon.svg`.
+- **Colors** — change the palette once in `styles/globals.css` (`:root` CSS variables) and `tailwind.config.ts` (`brand` colors). Everything updates globally.
+- **Fonts** — swap Geist for another `next/font` in `app/layout.tsx`.
+
+## 🌐 Deploy to Vercel
+
+1. Push this repo to GitHub.
+2. Go to [vercel.com/new](https://vercel.com/new) and import the repo. Framework is auto-detected — no config needed.
+3. Click **Deploy**. You get a live `*.vercel.app` URL in ~1 minute.
+
+**Custom domain:** Vercel dashboard → your project → **Settings → Domains** → add `yourname.com` and follow the DNS instructions. HTTPS is automatic.
+After deploying, set your real domain in `lib/site.ts` (`url`) so SEO/OG tags use absolute URLs.
+
+## 📁 Project structure
+
+```
+app/                 App Router: layout, page, and SEO route files
+  layout.tsx         Root layout — fonts, metadata, global overlays, JSON-LD
+  page.tsx           Home page — composes all sections
+  opengraph-image.tsx / twitter-image.tsx   Dynamic social images
+  robots.ts · sitemap.ts · manifest.ts      SEO route handlers
+components/
+  ui/                shadcn-style primitives (button, card, badge, input, textarea)
+  sections/          Page sections (hero, about, skills, …, contact)
+  effects/           gradient-blobs, particles, mouse-spotlight
+  motion/            reveal (scroll-reveal wrapper)
+  navbar · footer · scroll-progress · back-to-top · loader · command-palette
+hooks/               use-active-section, use-media-query, use-mounted
+lib/                 site.ts (config), data.ts (content), utils.ts (cn)
+types/               shared TypeScript types
+styles/              globals.css (Tailwind + design tokens)
+public/              icon.svg, resume.pdf, projects/*.svg
+```
+
+## 📈 Performance & a11y
+
+Targets 100s across the board on Lighthouse. To verify:
+
+```bash
+npm run build && npm run start
+# then run Lighthouse in Chrome DevTools against http://localhost:3000
+```
+
+## 📝 License
+
+MIT — make it yours.

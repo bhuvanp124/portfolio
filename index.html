@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Name — Software Developer</title>
+  <meta name="description" content="Portfolio of Your Name, a software developer. Projects, experience, and contact." />
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:title" content="Your Name — Software Developer" />
+  <meta property="og:description" content="Portfolio, projects and experience." />
+  <meta property="og:type" content="website" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💻</text></svg>" />
+
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --bg-soft: #121821;
+      --card: #151c26;
+      --border: #232c3a;
+      --text: #e6edf3;
+      --muted: #93a1b1;
+      --accent: #5b8cff;
+      --accent-2: #7cf0c8;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+      --maxw: 960px;
+    }
+    :root[data-theme="light"] {
+      --bg: #f7f9fc;
+      --bg-soft: #eef2f8;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #56637a;
+      --accent: #2f6bff;
+      --accent-2: #0fa87e;
+      --shadow: 0 10px 30px rgba(20,30,60,.10);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(91,140,255,.12), transparent 60%), var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+
+    /* NAV */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: saturate(180%) blur(10px);
+      background: color-mix(in oklab, var(--bg) 78%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 62px;
+    }
+    .brand { font-weight: 700; letter-spacing: .2px; }
+    .brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 22px; align-items: center; }
+    .nav-links a { color: var(--muted); font-size: 14px; font-weight: 500; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .theme-btn {
+      background: var(--card); border: 1px solid var(--border); color: var(--text);
+      width: 38px; height: 38px; border-radius: 10px; cursor: pointer; font-size: 16px;
+      display: grid; place-items: center; transition: transform .15s ease;
+    }
+    .theme-btn:hover { transform: translateY(-1px); }
+    @media (max-width: 640px) { .nav-links a:not(.theme-btn) { display: none; } }
+
+    /* HERO */
+    .hero { padding: 90px 0 60px; }
+    .eyebrow {
+      display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: .5px;
+      color: var(--accent-2); text-transform: uppercase; margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-size: clamp(34px, 6vw, 56px); line-height: 1.08; margin: 0 0 16px;
+      letter-spacing: -1px;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero p.lead { font-size: clamp(16px, 2.4vw, 20px); color: var(--muted); max-width: 620px; margin: 0 0 28px; }
+    .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 20px; border-radius: 12px; font-weight: 600; font-size: 15px;
+      border: 1px solid var(--border); transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .btn:hover { transform: translateY(-2px); text-decoration: none; }
+    .btn-primary { background: linear-gradient(90deg, var(--accent), #6aa0ff); color: #fff; border-color: transparent; box-shadow: var(--shadow); }
+    .btn-ghost { background: var(--card); color: var(--text); }
+
+    /* SECTIONS */
+    section { padding: 56px 0; }
+    .section-title { font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+    .section-head h2 { font-size: clamp(26px, 4vw, 34px); margin: 0 0 8px; letter-spacing: -.5px; }
+    .section-head p { color: var(--muted); margin: 0 0 28px; max-width: 640px; }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: start; }
+    @media (max-width: 720px) { .about-grid { grid-template-columns: 1fr; } }
+    .about-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+    .skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .chip { font-size: 13px; padding: 6px 12px; border-radius: 999px; background: var(--bg-soft); border: 1px solid var(--border); color: var(--muted); }
+
+    /* PROJECTS */
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+    .project {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 22px; box-shadow: var(--shadow); transition: transform .18s ease, border-color .18s ease;
+      display: flex; flex-direction: column;
+    }
+    .project:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .project h3 { margin: 0 0 8px; font-size: 19px; }
+    .project p { color: var(--muted); margin: 0 0 16px; flex: 1; }
+    .project .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .project .tags span { font-size: 12px; color: var(--accent-2); background: color-mix(in oklab, var(--accent-2) 12%, transparent); padding: 4px 10px; border-radius: 6px; }
+    .project .links { display: flex; gap: 16px; font-size: 14px; font-weight: 600; }
+
+    /* EXPERIENCE (timeline) */
+    .timeline { position: relative; padding-left: 26px; }
+    .timeline::before { content: ""; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+    .tl-item { position: relative; padding-bottom: 28px; }
+    .tl-item::before { content: ""; position: absolute; left: -26px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 25%, transparent); }
+    .tl-item h3 { margin: 0; font-size: 18px; }
+    .tl-item .meta { color: var(--muted); font-size: 14px; margin: 2px 0 8px; }
+    .tl-item ul { margin: 0; padding-left: 18px; color: var(--muted); }
+
+    /* CONTACT */
+    .contact { text-align: center; }
+    .contact .btn { margin-top: 8px; }
+    .socials { display: flex; gap: 18px; justify-content: center; margin-top: 22px; flex-wrap: wrap; }
+    .socials a { color: var(--muted); font-weight: 600; font-size: 15px; }
+    .socials a:hover { color: var(--text); }
+
+    footer { border-top: 1px solid var(--border); padding: 28px 0; text-align: center; color: var(--muted); font-size: 14px; }
+
+    /* reveal on scroll */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <nav>
+        <div class="brand">Your<span>Name</span></div>
+        <div class="nav-links">
+          <a href="#about">About</a>
+          <a href="#projects">Projects</a>
+          <a href="#experience">Experience</a>
+          <a href="#contact">Contact</a>
+          <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap">
+        <span class="eyebrow">Software Developer · 2026 Graduate</span>
+        <h1>Hi, I'm <span class="grad">Your Name</span>.<br>I build things for the web.</h1>
+        <p class="lead">Recent Computer Science graduate passionate about creating clean, efficient software. I love turning ideas into real, usable products.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#projects">View my work →</a>
+          <a class="btn btn-ghost" href="/resume.pdf" download>Download résumé</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="wrap reveal">
+        <div class="section-head">
+          <p class="section-title">About</p>
+          <h2>A little about me</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-card">
+            <p>I'm a software developer who recently graduated with a degree in Computer Science. I enjoy working across the stack — from designing intuitive interfaces to building reliable back-end services.</p>
+            <p style="color:var(--muted)">When I'm not coding, you'll find me exploring new technologies, contributing to open source, and learning something new. I'm currently looking for full-time software engineering opportunities.</p>
+          </div>
+          <div class="about-card">
+            <strong style="font-size:14px">Tech I work with</strong>
+            <div class="skills">
+              <span class="chip">JavaScript</span>
+              <span class="chip">TypeScript</span>
+              <span class="chip">Python</span>
+              <span class="chip">React</span>
+              <span class="chip">Node.js</span>
+              <span class="chip">SQL</span>
+              <span class="chip">Git</span>
+              <span class="chip">HTML/CSS</span>
+              <span class="chip">Java</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="wrap reveal">
+        <div class="section-head">
+          <p class="section-title">Projects</p>
+          <h2>Things I've built</h2>
+          <p>A selection of projects I'm proud of. Replace these with your own — each card links to a live demo and the source code.</p>
+        </div>
+        <div class="grid">
+          <article class="project">
+            <h3>Project One</h3>
+            <div class="tags"><span>React</span><span>Node.js</span><span>MongoDB</span></div>
+            <p>A short, punchy description of what this project does, the problem it solves, and what you learned building it.</p>
+            <div class="links"><a href="#">Live Demo ↗</a><a href="#">Source Code ↗</a></div>
+          </article>
+          <article class="project">
+            <h3>Project Two</h3>
+            <div class="tags"><span>Python</span><span>FastAPI</span><span>PostgreSQL</span></div>
+            <p>Describe the standout feature here. Mention any measurable impact — users, performance, or scale — if you can.</p>
+            <div class="links"><a href="#">Live Demo ↗</a><a href="#">Source Code ↗</a></div>
+          </article>
+          <article class="project">
+            <h3>Project Three</h3>
+            <div class="tags"><span>TypeScript</span><span>Next.js</span></div>
+            <p>Keep descriptions to 2–3 sentences. Recruiters skim, so lead with impact and the tech that matters.</p>
+            <div class="links"><a href="#">Live Demo ↗</a><a href="#">Source Code ↗</a></div>
+          </article>
+          <article class="project">
+            <h3>Project Four</h3>
+            <div class="tags"><span>Java</span><span>Spring</span></div>
+            <p>A capstone or class project counts too — frame it around what you contributed and the outcome.</p>
+            <div class="links"><a href="#">Live Demo ↗</a><a href="#">Source Code ↗</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <div class="wrap reveal">
+        <div class="section-head">
+          <p class="section-title">Experience</p>
+          <h2>Where I've been</h2>
+        </div>
+        <div class="timeline">
+          <div class="tl-item">
+            <h3>Software Engineering Intern — Company Name</h3>
+            <div class="meta">Summer 2025 · City, Country</div>
+            <ul>
+              <li>Built X feature that did Y, resulting in Z measurable outcome.</li>
+              <li>Collaborated with a team of N engineers using Agile/Git workflow.</li>
+            </ul>
+          </div>
+          <div class="tl-item">
+            <h3>B.S. in Computer Science — University Name</h3>
+            <div class="meta">2022 – 2026 · GPA / honors (optional)</div>
+            <ul>
+              <li>Relevant coursework: Data Structures, Algorithms, Databases, Web Development.</li>
+              <li>Clubs, hackathons, or awards worth highlighting.</li>
+            </ul>
+          </div>
+          <div class="tl-item">
+            <h3>Freelance / Personal Projects</h3>
+            <div class="meta">2023 – Present</div>
+            <ul>
+              <li>Describe any freelance work, open-source contributions, or side projects.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="wrap reveal contact">
+        <p class="section-title">Contact</p>
+        <h2>Let's work together</h2>
+        <p style="color:var(--muted); max-width:520px; margin:0 auto 8px;">I'm open to full-time roles and interesting projects. The fastest way to reach me is email — I'll get back to you quickly.</p>
+        <a class="btn btn-primary" href="mailto:you@example.com">Say hello 👋</a>
+        <div class="socials">
+          <a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="mailto:you@example.com">Email</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">© <span id="year"></span> Your Name · Built with plain HTML &amp; CSS</div>
+  </footer>
+
+  <script>
+    // Theme toggle with persistence
+    const root = document.documentElement;
+    const btn = document.getElementById('themeBtn');
+    const saved = localStorage.getItem('theme');
+    if (saved) root.setAttribute('data-theme', saved);
+    function updateIcon() {
+      const isLight = root.getAttribute('data-theme') === 'light';
+      btn.textContent = isLight ? '☀️' : '🌙';
+    }
+    updateIcon();
+    btn.addEventListener('click', () => {
+      const isLight = root.getAttribute('data-theme') === 'light';
+      const next = isLight ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateIcon();
+    });
+
+    // Reveal on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

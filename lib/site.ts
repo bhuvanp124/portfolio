@@ -8,7 +8,7 @@ export const siteConfig = {
   // TODO: set this to your real domain once deployed (e.g. your Vercel URL).
   url: "https://bhuvanprakash.dev",
   description:
-    "Software Engineer with strong foundations in DSA and system design. I build Android apps, AI-driven platforms, and high-performance systems.",
+    "Software engineer with strong foundations in data structures, algorithms, and system design — building Android apps, AI-driven platforms, and high-performance systems.",
   locale: "en_US",
   email: "bhuvanpdocs@gmail.com",
   phone: "+91 7411127981",

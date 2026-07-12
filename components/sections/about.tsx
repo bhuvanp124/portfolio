@@ -24,7 +24,7 @@ export function About() {
           <Reveal delayIndex={about.paragraphs.length + 1}>
             <div className="mt-2 inline-flex items-center gap-2 text-sm text-brand">
               <Sparkles className="h-4 w-4" />
-              Design-minded engineer, obsessed with the details.
+              Algorithms-driven engineer with a bias for shipping.
             </div>
           </Reveal>
         </div>

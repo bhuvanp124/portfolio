@@ -56,11 +56,11 @@ export const socialLinks: SocialLink[] = [
 
 export const about = {
   headline:
-    "I engineer software from the algorithm up — mobile apps, AI platforms, and high-throughput systems.",
+    "I build software from the algorithm up — Android apps, AI platforms, and high-performance systems.",
   paragraphs: [
-    "I'm a Software Engineer with strong foundations in Data Structures, Algorithms, and System Design. I'm currently interning as an Android Developer at MindMatrix, building a Kotlin-based application end to end.",
-    "I love working across the stack — from crafting Material Design UIs and integrating REST APIs, to architecting AI-driven solutions with Python and AWS, to squeezing performance out of low-level C++ systems.",
-    "Graduating in 2026 with a B.E. in Computer Science (Data Science). I'm passionate about mobile development, machine learning, competitive programming, and quantitative analysis.",
+    "I'm a software engineer graduating in 2026 with a strong foundation in data structures, algorithms, and system design. Currently, I'm an Android Developer intern at MindMatrix, where I ship a Kotlin application end to end.",
+    "My work spans the full stack — from crafting polished Material Design interfaces and integrating REST APIs, to architecting AI-driven platforms with Python and AWS, to squeezing performance out of low-level C++ systems that handle 10k+ requests per second.",
+    "Having solved 400+ algorithmic problems and led hackathon teams, I pair engineering depth with a genuine bias for shipping. Right now, I'm looking for full-time software engineering roles where I can build products people rely on.",
   ],
   stats: [
     { value: "400+", label: "DSA problems solved" },

@@ -53,7 +53,7 @@ export function CommandPalette() {
       })),
       {
         id: "resume",
-        label: "Download résumé",
+        label: "Download resume",
         hint: "PDF",
         icon: FileText,
         run: () => openLink(siteConfig.resume),

@@ -18,12 +18,12 @@ export function Resume() {
               Want the full picture?
             </h2>
             <p className="text-pretty text-muted">
-              Grab my résumé for a detailed look at my experience, projects, and
+              Grab my resume for a detailed look at my experience, projects, and
               education.
             </p>
             <Button asChild size="lg" variant="gradient" className="mt-2">
               <a href={siteConfig.resume} download>
-                <Download className="h-4 w-4" /> Download résumé
+                <Download className="h-4 w-4" /> Download resume
               </a>
             </Button>
           </div>

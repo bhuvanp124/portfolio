@@ -65,7 +65,7 @@ export const about = {
   stats: [
     { value: "400+", label: "DSA problems solved" },
     { value: "8.20", label: "CGPA / 10" },
-    { value: "3+", label: "Flagship projects" },
+    { value: "6+", label: "Flagship projects" },
     { value: "2026", label: "Graduating" },
   ],
 };
@@ -238,6 +238,7 @@ export const projects: Project[] = [
     ],
     // TODO: confirm the exact repo URL.
     github: "https://github.com/bhuvanp124/3D_-car_visualize",
+    featured: true,
   },
   {
     title: "AI Report Generator",
@@ -253,6 +254,7 @@ export const projects: Project[] = [
     ],
     // TODO: confirm the exact repo URL.
     github: "https://github.com/bhuvanp124/ai-report-generator",
+    featured: true,
   },
 ];
 

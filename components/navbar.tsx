@@ -116,7 +116,7 @@ export function Navbar() {
           </button>
           <Button asChild size="sm" variant="primary" className="hidden sm:flex">
             <a href={siteConfig.resume} download>
-              Résumé
+              Resume
             </a>
           </Button>
           <button
@@ -180,7 +180,7 @@ export function Navbar() {
                 ))}
                 <Button asChild size="sm" className="ml-auto">
                   <a href={siteConfig.resume} download>
-                    Résumé
+                    Resume
                   </a>
                 </Button>
               </div>

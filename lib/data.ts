@@ -208,6 +208,52 @@ export const projects: Project[] = [
     github: siteConfig.handles.github,
     featured: true,
   },
+  {
+    title: "Car Parts Marketplace",
+    description:
+      "A full-stack marketplace for buying and selling car parts — with listings, search, user accounts, and a cart & checkout flow.",
+    image: "/projects/car-marketplace.svg",
+    categories: ["Web"],
+    tech: ["Next.js", "Express", "PostgreSQL", "REST APIs"],
+    features: [
+      "Product listings with search & filtering",
+      "User authentication & accounts",
+      "Cart and checkout flow",
+    ],
+    // TODO: confirm the exact repo URL.
+    github: "https://github.com/bhuvanp124/car-parts-marketplace",
+    featured: true,
+  },
+  {
+    title: "3D Car Visualizer",
+    description:
+      "An interactive 3D car visualizer that lets users rotate, zoom, and customize vehicles in real time, right in the browser.",
+    image: "/projects/car-3d.svg",
+    categories: ["Web"],
+    tech: ["Three.js", "React Three Fiber", "WebGL", "TypeScript"],
+    features: [
+      "Real-time 3D rendering",
+      "Orbit, zoom & inspect controls",
+      "Customizable colors & materials",
+    ],
+    // TODO: confirm the exact repo URL.
+    github: "https://github.com/bhuvanp124/3D_-car_visualize",
+  },
+  {
+    title: "AI Report Generator",
+    description:
+      "An AI tool that turns raw data and prompts into polished, structured reports automatically using large language models.",
+    image: "/projects/ai-report.svg",
+    categories: ["AI/ML"],
+    tech: ["Python", "LLMs", "NLP", "Streamlit"],
+    features: [
+      "LLM-powered report generation",
+      "Template-driven, structured output",
+      "Export to shareable formats",
+    ],
+    // TODO: confirm the exact repo URL.
+    github: "https://github.com/bhuvanp124/ai-report-generator",
+  },
 ];
 
 /* -------------------------------------------------------------------------- */

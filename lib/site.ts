@@ -14,10 +14,9 @@ export const siteConfig = {
   phone: "+91 7411127981",
   location: "Bangalore, India",
   handles: {
-    // TODO: Replace these with your real profile URLs.
-    github: "https://github.com/bhuvanprakash",
-    linkedin: "https://linkedin.com/in/bhuvan-prakash",
-    leetcode: "https://leetcode.com/u/bhuvanprakash",
+    github: "https://github.com/bhuvanp124",
+    linkedin: "https://www.linkedin.com/in/bhuvan-p-77168925a/",
+    leetcode: "https://leetcode.com/u/Bhuvan_Prakash/",
   },
   // Path (in /public) to your resume PDF.
   resume: "/resume.pdf",

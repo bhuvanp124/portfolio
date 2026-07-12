@@ -11,7 +11,7 @@ import { projects } from "@/lib/data";
 import type { ProjectCategory } from "@/types";
 import { cn } from "@/lib/utils";
 
-const FILTERS: ProjectCategory[] = ["All", "AI/ML", "Systems", "Quant"];
+const FILTERS: ProjectCategory[] = ["All", "AI/ML", "Web", "Systems", "Quant"];
 
 export function Projects() {
   const [filter, setFilter] = useState<ProjectCategory>("All");

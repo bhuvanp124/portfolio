@@ -19,7 +19,7 @@ export const siteConfig = {
     leetcode: "https://leetcode.com/u/Bhuvan_Prakash/",
   },
   // Path (in /public) to your resume PDF.
-  resume: "/resume.pdf",
+  resume: "/Bhuvan-Prakash-Resume.pdf",
   keywords: [
     "Bhuvan Prakash",
     "Software Engineer",

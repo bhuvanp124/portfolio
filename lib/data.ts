@@ -174,7 +174,6 @@ export const projects: Project[] = [
       "Round-Robin & Least-Connection routing",
       "Active health checks & automatic failover (99.9% availability)",
     ],
-    // TODO: add your GitHub / live demo links.
     github: siteConfig.handles.github,
     featured: true,
   },
@@ -220,8 +219,7 @@ export const projects: Project[] = [
       "User authentication & accounts",
       "Cart and checkout flow",
     ],
-    // TODO: confirm the exact repo URL.
-    github: "https://github.com/bhuvanp124/car-parts-marketplace",
+    github: siteConfig.handles.github,
     featured: true,
   },
   {
@@ -236,8 +234,7 @@ export const projects: Project[] = [
       "Orbit, zoom & inspect controls",
       "Customizable colors & materials",
     ],
-    // TODO: confirm the exact repo URL.
-    github: "https://github.com/bhuvanp124/3D_-car_visualize",
+    github: siteConfig.handles.github,
     featured: true,
   },
   {
@@ -252,8 +249,7 @@ export const projects: Project[] = [
       "Template-driven, structured output",
       "Export to shareable formats",
     ],
-    // TODO: confirm the exact repo URL.
-    github: "https://github.com/bhuvanp124/ai-report-generator",
+    github: siteConfig.handles.github,
     featured: true,
   },
 ];

@@ -58,7 +58,7 @@ export const about = {
   headline:
     "I build software from the algorithm up — Android apps, AI platforms, and high-performance systems.",
   paragraphs: [
-    "I'm a software engineer graduating in 2026 with a strong foundation in data structures, algorithms, and system design. Currently, I'm an Android Developer intern at MindMatrix, where I ship a Kotlin application end to end.",
+    "I'm a software engineer with a strong foundation in data structures, algorithms, and system design, fresh out of a 2026 B.E. in Computer Science. Most recently I was an Android Developer intern at MindMatrix, where I shipped a Kotlin application end to end.",
     "My work spans the full stack — from crafting polished Material Design interfaces and integrating REST APIs, to architecting AI-driven platforms with Python and AWS, to squeezing performance out of low-level C++ systems that handle 10k+ requests per second.",
     "Having solved 400+ algorithmic problems and led hackathon teams, I pair engineering depth with a genuine bias for shipping. I'm drawn to mobile development, machine learning, and quantitative analysis, and I'm looking for full-time software engineering roles where I can build products people rely on.",
   ],
@@ -66,7 +66,7 @@ export const about = {
     { value: "400+", label: "DSA problems solved" },
     { value: "8.20", label: "CGPA / 10" },
     { value: "6+", label: "Flagship projects" },
-    { value: "2026", label: "Graduating" },
+    { value: "2026", label: "Graduated" },
   ],
 };
 
@@ -127,7 +127,7 @@ export const experience: ExperienceItem[] = [
     period: "Jan 2026 – Jun 2026",
     location: "Bangalore, India",
     summary:
-      "Building a Kotlin-based Android application, contributing across the full development lifecycle.",
+      "Built a Kotlin-based Android application, contributing across the full development lifecycle.",
     highlights: [
       "Developed production applications using Kotlin, contributing to feature development and software delivery.",
       "Built application workflows with REST APIs, implementing data validation, error handling, and reliable client-server communication.",

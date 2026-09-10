@@ -62,13 +62,13 @@ export function OverviewPanel() {
           </div>
         </div>
 
-        {/* Currently */}
+        {/* Most recent role */}
         <div className="flex flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-card">
           <div>
             <span className="grid h-11 w-11 place-items-center rounded-xl border border-brand/30 bg-brand/10 text-brand">
               <BriefcaseBusiness className="h-5 w-5" />
             </span>
-            <p className="mt-4 text-xs uppercase tracking-wide text-muted">Currently</p>
+            <p className="mt-4 text-xs uppercase tracking-wide text-muted">Most recently</p>
             <p className="mt-1 font-semibold">{current.role}</p>
             <p className="text-sm text-muted">{current.company}</p>
             <p className="mt-1 text-xs text-muted">{current.period}</p>

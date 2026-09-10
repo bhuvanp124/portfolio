@@ -36,7 +36,7 @@ export function ExperiencePanel() {
                   <p className="text-sm text-brand">{item.company}</p>
                 </div>
                 <div className="flex flex-col gap-1 sm:items-end">
-                  {index === 0 && <Badge variant="brand">Current</Badge>}
+                  {index === 0 && <Badge variant="brand">Most recent</Badge>}
                   <span className="text-xs text-muted">{item.period}</span>
                 </div>
               </div>

@@ -65,7 +65,7 @@ export const profile = {
     .join("")
     .slice(0, 2)
     .toUpperCase(),
-  tagline: "Software engineer, graduating 2026 — building from the algorithm up.",
+  tagline: "Software engineer, 2026 graduate — building from the algorithm up.",
   headline: about.headline,
   paragraphs: about.paragraphs,
   /** Headline KPI tiles, reused from the portfolio's About stats. */
@@ -134,7 +134,7 @@ export const updates: Update[] = [
     id: "u1",
     type: "status",
     title: "Open to full-time SWE roles for 2026",
-    body: "Actively interviewing for software engineering positions starting July 2026.",
+    body: "Actively interviewing for software engineering positions, available to start immediately.",
     time: "This month",
   },
   {
@@ -161,8 +161,8 @@ export const updates: Update[] = [
   {
     id: "u5",
     type: "education",
-    title: "Graduating B.E. Computer Science (Data Science)",
-    body: "RNS Institute of Technology · CGPA 8.20 / 10 · expected June 2026.",
+    title: "Graduated B.E. Computer Science (Data Science)",
+    body: "RNS Institute of Technology · CGPA 8.20 / 10 · completed June 2026.",
     time: "June 2026",
   },
 ];

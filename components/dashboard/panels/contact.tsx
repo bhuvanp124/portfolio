@@ -34,7 +34,7 @@ export function ContactPanel() {
           <div>
             <h2 className="text-xl font-bold tracking-tight">Let&apos;s build something.</h2>
             <p className="mt-1 text-sm text-muted">
-              {availability.status} · available from {availability.availableFrom}.
+              {availability.status} · start date: {availability.availableFrom}.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">

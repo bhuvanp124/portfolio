@@ -110,7 +110,7 @@ export function OverviewPanel() {
         <div>
           <p className="font-semibold">Looking for a new-grad software engineer?</p>
           <p className="text-sm text-muted">
-            {availability.status} · available from {availability.availableFrom}.
+            {availability.status} · start date: {availability.availableFrom}.
           </p>
         </div>
         <Button variant="gradient" size="sm" asChild>

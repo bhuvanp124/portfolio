@@ -28,7 +28,7 @@ export function AvailabilityPanel() {
             <div>
               <p className="text-lg font-semibold text-emerald-200">{availability.status}</p>
               <p className="text-sm text-muted">
-                Available from {availability.availableFrom} ·{" "}
+                Start date: {availability.availableFrom} ·{" "}
                 {availability.current.role} at {availability.current.company}
               </p>
             </div>

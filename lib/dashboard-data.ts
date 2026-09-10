@@ -79,11 +79,11 @@ export const profile = {
 export const availability = {
   open: true,
   status: "Open to full-time roles",
-  availableFrom: "July 2026",
+  availableFrom: "Immediate",
   current: {
     role: experience[0].role,
     company: experience[0].company,
-    note: "Interning through graduation",
+    note: "Most recent role · completed June 2026",
   },
   roles: [
     "Software Engineer",
@@ -95,8 +95,8 @@ export const availability = {
   locations: ["Bangalore, India", "Open to relocation", "Remote (India)"],
   preferences: [
     { label: "Employment", value: "Full-time · New grad" },
-    { label: "Start date", value: "July 2026 (post-graduation)" },
-    { label: "Notice", value: "Immediate after June 2026" },
+    { label: "Start date", value: "Immediate" },
+    { label: "Notice", value: "None — available to start now" },
     { label: "Visa", value: "India — no sponsorship needed locally" },
   ],
 };
@@ -141,8 +141,8 @@ export const updates: Update[] = [
     id: "u2",
     type: "role",
     title: "Joined MindMatrix as a Software Engineer Intern",
-    body: "Shipping a Kotlin Android app end-to-end and exploring Google AI Studio for AI-assisted features.",
-    time: "Dec 2025",
+    body: "Shipped production Kotlin features and built REST-API-backed application workflows through June 2026.",
+    time: "Jan 2026",
   },
   {
     id: "u3",
@@ -156,7 +156,7 @@ export const updates: Update[] = [
     type: "milestone",
     title: "Built a Layer-7 load balancer handling 10k+ req/s",
     body: "A high-throughput C++ systems project using non-blocking I/O and multithreaded request handling.",
-    time: "2025",
+    time: "Mar 2026",
   },
   {
     id: "u5",

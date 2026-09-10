@@ -60,7 +60,7 @@ export const about = {
   paragraphs: [
     "I'm a software engineer graduating in 2026 with a strong foundation in data structures, algorithms, and system design. Currently, I'm an Android Developer intern at MindMatrix, where I ship a Kotlin application end to end.",
     "My work spans the full stack — from crafting polished Material Design interfaces and integrating REST APIs, to architecting AI-driven platforms with Python and AWS, to squeezing performance out of low-level C++ systems that handle 10k+ requests per second.",
-    "Having solved 400+ algorithmic problems and led hackathon teams, I pair engineering depth with a genuine bias for shipping. Right now, I'm looking for full-time software engineering roles where I can build products people rely on.",
+    "Having solved 400+ algorithmic problems and led hackathon teams, I pair engineering depth with a genuine bias for shipping. I'm drawn to mobile development, machine learning, and quantitative analysis, and I'm looking for full-time software engineering roles where I can build products people rely on.",
   ],
   stats: [
     { value: "400+", label: "DSA problems solved" },
@@ -124,14 +124,14 @@ export const experience: ExperienceItem[] = [
   {
     role: "Software Engineer Intern",
     company: "MindMatrix",
-    period: "Dec 2025 – Present",
+    period: "Jan 2026 – Jun 2026",
     location: "Bangalore, India",
     summary:
       "Building a Kotlin-based Android application, contributing across the full development lifecycle.",
     highlights: [
-      "Building an Android application using Kotlin, contributing across the full development lifecycle.",
-      "Implementing UI/UX screens following Material Design guidelines and exploring Google AI Studio for AI-assisted features.",
-      "Integrating REST APIs for backend communication and optimizing app performance by resolving crashes and improving stability.",
+      "Developed production applications using Kotlin, contributing to feature development and software delivery.",
+      "Built application workflows with REST APIs, implementing data validation, error handling, and reliable client-server communication.",
+      "Resolved application issues and optimized performance, improving reliability and overall system stability.",
     ],
   },
   {
@@ -168,6 +168,7 @@ export const projects: Project[] = [
       "A Layer 7 load balancer in C++ handling 10k+ concurrent requests/second with minimal latency using non-blocking I/O and multithreaded request handling.",
     image: "/projects/load-balancer.svg",
     categories: ["Systems"],
+    period: "Mar 2026",
     tech: ["C++", "Socket Programming", "Multithreading", "Non-blocking I/O"],
     features: [
       "10k+ concurrent requests/second",
@@ -183,6 +184,7 @@ export const projects: Project[] = [
       "An AI-powered interview simulator that uses LLMs to generate dynamic, context-aware technical questions tailored to each candidate's responses.",
     image: "/projects/interview-platform.svg",
     categories: ["AI/ML"],
+    period: "Jul 2025",
     tech: ["Python", "NLP", "LLMs", "OpenCV", "AWS (EC2, S3)"],
     features: [
       "Context-aware question generation via LLMs",
@@ -198,6 +200,7 @@ export const projects: Project[] = [
       "An event-driven backtesting engine to simulate high-frequency trading strategies on minute-level OHLCV data, with rigorous risk validation.",
     image: "/projects/quant-engine.svg",
     categories: ["Quant"],
+    period: "Oct 2025",
     tech: ["Python", "Pandas", "NumPy"],
     features: [
       "Event-driven HFT strategy simulation",

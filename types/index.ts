@@ -41,6 +41,7 @@ export interface Project {
   categories: Exclude<ProjectCategory, "All">[];
   tech: string[];
   features: string[];
+  period?: string;
   github?: string;
   demo?: string;
   featured?: boolean;

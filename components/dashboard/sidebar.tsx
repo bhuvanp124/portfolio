@@ -76,7 +76,7 @@ export function Sidebar({ active, onSelect }: SidebarProps) {
           </div>
         )}
         <p className="mt-2 text-xs text-muted">
-          Available from {availability.availableFrom}. Download the résumé for the full details.
+          Start date: {availability.availableFrom}. Download the resume for the full details.
         </p>
         <a
           href={profile.resume}

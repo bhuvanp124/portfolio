@@ -61,7 +61,7 @@ export function Hero() {
           >
             <span className="text-gradient">Hi, I&apos;m {siteConfig.name}.</span>
             <br />
-            <span className="text-gradient-brand">I build the web.</span>
+            <span className="text-gradient-brand">I build from the algorithm up.</span>
           </motion.h1>
 
           <motion.p

@@ -100,7 +100,14 @@ export function Projects() {
               {/* Body */}
               <div className="flex flex-1 flex-col p-6">
                 <div className="flex items-start justify-between gap-3">
-                  <h3 className="text-xl font-semibold">{p.title}</h3>
+                  <div>
+                    <h3 className="text-xl font-semibold">{p.title}</h3>
+                    {p.period && (
+                      <p className="mt-1 text-xs uppercase tracking-wide text-muted">
+                        {p.period}
+                      </p>
+                    )}
+                  </div>
                   <div className="flex items-center gap-2">
                     {p.github && (
                       <a

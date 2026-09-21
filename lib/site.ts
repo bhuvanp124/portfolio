@@ -4,9 +4,13 @@
 export const siteConfig = {
   name: "Bhuvan Prakash",
   role: "Software Engineer",
-  // Used for SEO/OpenGraph absolute URLs.
-  // TODO: set this to your real domain once deployed (e.g. your Vercel URL).
-  url: "https://bhuvanprakash.dev",
+  // Used for SEO/OpenGraph absolute URLs. Must be a domain that actually
+  // resolves: canonical tags, the sitemap and the OG/Twitter image URLs are all
+  // built from it, so a dead value breaks link previews and misdirects
+  // indexing. Override with NEXT_PUBLIC_SITE_URL once a custom domain is live.
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    "https://portfolio-bhuvanp124s-projects.vercel.app",
   description:
     "Software engineer with strong foundations in data structures, algorithms, and system design — building Android apps, AI-driven platforms, and high-performance systems.",
   locale: "en_US",

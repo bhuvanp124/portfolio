@@ -37,6 +37,9 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      transitionTimingFunction: {
+        smooth: "cubic-bezier(0.22, 1, 0.36, 1)",
+      },
       boxShadow: {
         glow: "0 0 0 1px rgba(255,255,255,0.04), 0 8px 40px -12px rgba(59,130,246,0.35)",
         "glow-violet": "0 0 0 1px rgba(255,255,255,0.04), 0 8px 40px -12px rgba(124,58,237,0.35)",
@@ -61,13 +64,22 @@ const config: Config = {
         "spin-slow": {
           to: { transform: "rotate(360deg)" },
         },
+        "intro-out": {
+          to: { opacity: "0", visibility: "hidden" },
+        },
+        "drop-in": {
+          from: { opacity: "0", transform: "translateY(-80px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
-        "fade-up": "fade-up 0.6s cubic-bezier(0.22,1,0.36,1) forwards",
+        "fade-up": "fade-up 0.6s cubic-bezier(0.22,1,0.36,1) both",
         float: "float 8s ease-in-out infinite",
         "gradient-x": "gradient-x 8s ease infinite",
         shimmer: "shimmer 2s infinite",
         "spin-slow": "spin-slow 14s linear infinite",
+        "intro-out": "intro-out 0.35s ease-in-out 0.15s forwards",
+        "drop-in": "drop-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both",
       },
     },
   },

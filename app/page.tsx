@@ -1,29 +1,17 @@
-import dynamic from "next/dynamic";
-
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { About } from "@/components/sections/about";
+import { Achievements } from "@/components/sections/achievements";
+import { Contact } from "@/components/sections/contact";
+import { Experience } from "@/components/sections/experience";
 import { Hero } from "@/components/sections/hero";
+import { Projects } from "@/components/sections/projects";
+import { Resume } from "@/components/sections/resume";
 import { Skills } from "@/components/sections/skills";
 
-// Below-the-fold sections are dynamically imported to trim the initial JS
-// payload and improve time-to-interactive.
-const Experience = dynamic(() =>
-  import("@/components/sections/experience").then((m) => m.Experience),
-);
-const Projects = dynamic(() =>
-  import("@/components/sections/projects").then((m) => m.Projects),
-);
-const Achievements = dynamic(() =>
-  import("@/components/sections/achievements").then((m) => m.Achievements),
-);
-const Resume = dynamic(() =>
-  import("@/components/sections/resume").then((m) => m.Resume),
-);
-const Contact = dynamic(() =>
-  import("@/components/sections/contact").then((m) => m.Contact),
-);
-
+// These were previously `next/dynamic` imports to "trim the initial JS
+// payload". On a fully static page that mostly bought a chunk-fetch waterfall
+// after hydration; importing them directly lets the whole page ship in one pass.
 export default function HomePage() {
   return (
     <>

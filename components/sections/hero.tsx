@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { ArrowRight, FileText, Github, Linkedin } from "lucide-react";
 
 import { GradientBlobs } from "@/components/effects/gradient-blobs";
@@ -9,19 +6,14 @@ import { Button } from "@/components/ui/button";
 import { about } from "@/lib/data";
 import { siteConfig } from "@/lib/site";
 
-const container = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
-};
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
+/**
+ * The hero is a server component on purpose.
+ *
+ * It previously used framer-motion with `initial="hidden"`, which serialised
+ * `opacity:0` onto the markup — including the <h1>, the LCP element — so
+ * nothing painted until hydration finished. The entrance is now pure CSS, and
+ * the headline carries no animation at all so it paints on first frame.
+ */
 export function Hero() {
   return (
     <section
@@ -38,42 +30,29 @@ export function Hero() {
       />
 
       <div className="container relative z-10">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="visible"
-          className="mx-auto flex max-w-3xl flex-col items-center text-center"
-        >
-          <motion.span
-            variants={item}
-            className="glass mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted"
-          >
+        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+          <span className="glass mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm text-muted">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
             </span>
             Available for new opportunities
-          </motion.span>
+          </span>
 
-          <motion.h1
-            variants={item}
-            className="text-balance text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl"
-          >
+          {/* No entrance animation here: this is the LCP element. */}
+          <h1 className="text-balance text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
             <span className="text-gradient">Hi, I&apos;m {siteConfig.name}.</span>
             <br />
             <span className="text-gradient-brand">I build from the algorithm up.</span>
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            variants={item}
-            className="mt-6 max-w-xl text-pretty text-lg text-muted"
-          >
+          <p className="mt-6 max-w-xl animate-fade-up text-pretty text-lg text-muted">
             {siteConfig.description}
-          </motion.p>
+          </p>
 
-          <motion.div
-            variants={item}
-            className="mt-9 flex flex-wrap items-center justify-center gap-3"
+          <div
+            className="mt-9 flex animate-fade-up flex-wrap items-center justify-center gap-3"
+            style={{ animationDelay: "90ms" }}
           >
             <Button asChild size="lg" variant="gradient">
               <a href="#projects">
@@ -105,12 +84,12 @@ export function Hero() {
                 <Linkedin className="h-4 w-4" /> LinkedIn
               </a>
             </Button>
-          </motion.div>
+          </div>
 
           {/* Quick stats */}
-          <motion.dl
-            variants={item}
-            className="mt-14 grid w-full grid-cols-2 gap-4 sm:grid-cols-4"
+          <dl
+            className="mt-14 grid w-full animate-fade-up grid-cols-2 gap-4 sm:grid-cols-4"
+            style={{ animationDelay: "180ms" }}
           >
             {about.stats.map((s) => (
               <div
@@ -124,8 +103,8 @@ export function Hero() {
                 <p className="mt-1 text-xs text-muted">{s.label}</p>
               </div>
             ))}
-          </motion.dl>
-        </motion.div>
+          </dl>
+        </div>
       </div>
     </section>
   );

@@ -46,12 +46,9 @@ export function Navbar() {
     );
 
   return (
-    <motion.header
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-3"
-    >
+    // CSS entrance, not framer-motion: `initial` used to serialise opacity:0
+    // onto the header, hiding the primary nav until hydration completed.
+    <header className="fixed inset-x-0 top-0 z-50 flex animate-drop-in justify-center px-4 pt-3">
       <nav
         className={cn(
           "flex w-full max-w-5xl items-center justify-between rounded-2xl px-4 py-2.5 transition-all duration-300",
@@ -188,6 +185,6 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }

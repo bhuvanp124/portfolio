@@ -13,18 +13,21 @@ interface RevealProps {
   as?: "div" | "section" | "li" | "article";
 }
 
-type Phase = "static" | "hidden" | "shown";
+/** visible → (below fold) hidden → animating → visible again, classes removed. */
+type Phase = "visible" | "hidden" | "animating";
 
 /**
  * Fades + lifts its children into view once, respecting reduced motion.
  *
- * The important property is that it renders *visible* on the server. The
- * previous framer-motion version used `initial="hidden"`, which stamped
- * `opacity:0` onto ~50 elements in the SSR markup, so the page read as blank
- * until hydration (and stayed blank entirely if JS never ran). Here the
- * element paints normally, and only after mount do we hide the ones that are
- * still below the fold — where the swap cannot be seen — before animating
- * them in on scroll.
+ * Two properties matter here:
+ *
+ * 1. It renders *visible* on the server. framer-motion's `initial` stamped
+ *    `opacity:0` into the markup, so everything below the hero stayed blank
+ *    until hydration finished — and stayed blank forever without JS.
+ * 2. The entrance is a CSS animation that is removed once it ends, rather than
+ *    a lingering transition. A finished `forwards` animation keeps overriding
+ *    `transform`, which would dead-lock the `hover:-translate-y` lift on the
+ *    cards that wrap this.
  */
 export function Reveal({
   children,
@@ -33,15 +36,14 @@ export function Reveal({
   as = "div",
 }: RevealProps) {
   const ref = useRef<HTMLElement>(null);
-  const [phase, setPhase] = useState<Phase>("static");
+  const [phase, setPhase] = useState<Phase>("visible");
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    // Anything already on screen keeps its painted state — never hide content
-    // the visitor can see.
+    // Never hide something the visitor can already see.
     if (el.getBoundingClientRect().top < window.innerHeight) return;
 
     setPhase("hidden");
@@ -49,11 +51,11 @@ export function Reveal({
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
-          setPhase("shown");
+          setPhase("animating");
           observer.disconnect();
         }
       },
-      { rootMargin: "0px 0px -12% 0px" },
+      { rootMargin: "0px 0px -10% 0px" },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -64,13 +66,14 @@ export function Reveal({
     {
       ref,
       className: cn(
-        phase !== "static" &&
-          "transition-[opacity,transform] duration-700 ease-smooth motion-reduce:transition-none",
-        phase === "hidden" && "translate-y-6 opacity-0",
-        phase === "shown" && "translate-y-0 opacity-100",
+        phase === "hidden" && "opacity-0",
+        phase === "animating" && "animate-fade-up",
         className,
       ),
-      style: phase === "shown" ? { transitionDelay: `${delayIndex * 80}ms` } : undefined,
+      style:
+        phase === "animating" ? { animationDelay: `${delayIndex * 70}ms` } : undefined,
+      // Drop the animation class once it has played so `transform` is free again.
+      onAnimationEnd: phase === "animating" ? () => setPhase("visible") : undefined,
     },
     children,
   );

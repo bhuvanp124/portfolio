@@ -12,17 +12,21 @@ interface Particle {
 }
 
 /**
- * A subtle, GPU-light canvas particle field. Renders nothing for users who
- * prefer reduced motion. Pauses when the tab is hidden to save battery.
+ * A subtle canvas particle field behind the hero.
+ *
+ * Cost control matters more than the effect here: this canvas is full-screen,
+ * so every frame it runs is a full-screen repaint. It therefore does not run
+ * at all on phones (where it costs the most and shows the least), and pauses
+ * whenever it scrolls out of view or the tab is hidden — previously the
+ * rAF loop kept running for the whole session, taxing every scroll further
+ * down the page.
  */
 export function Particles({ density = 0.00008 }: { density?: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReduced) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(max-width: 767px)").matches) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -31,7 +35,8 @@ export function Particles({ density = 0.00008 }: { density?: number }) {
 
     let particles: Particle[] = [];
     let raf = 0;
-    let running = true;
+    let onScreen = true;
+    let ticking = false;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     const resize = () => {
@@ -53,7 +58,6 @@ export function Particles({ density = 0.00008 }: { density?: number }) {
     };
 
     const tick = () => {
-      if (!running) return;
       const { innerWidth: w, innerHeight: h } = window;
       ctx.clearRect(0, 0, w, h);
       for (const p of particles) {
@@ -69,21 +73,43 @@ export function Particles({ density = 0.00008 }: { density?: number }) {
       raf = requestAnimationFrame(tick);
     };
 
-    const onVisibility = () => {
-      running = !document.hidden;
-      if (running) tick();
-      else cancelAnimationFrame(raf);
+    const start = () => {
+      if (ticking) return;
+      ticking = true;
+      raf = requestAnimationFrame(tick);
+    };
+    const stop = () => {
+      if (!ticking) return;
+      ticking = false;
+      cancelAnimationFrame(raf);
+    };
+    const sync = () => {
+      if (onScreen && !document.hidden) start();
+      else stop();
     };
 
     resize();
-    tick();
+    sync();
+
+    // Pause as soon as the hero scrolls away — the rest of the page should not
+    // be competing with a full-screen canvas for frame budget.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        onScreen = entries.some((e) => e.isIntersecting);
+        sync();
+      },
+      { threshold: 0 },
+    );
+    observer.observe(canvas);
+
     window.addEventListener("resize", resize);
-    document.addEventListener("visibilitychange", onVisibility);
+    document.addEventListener("visibilitychange", sync);
 
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
+      observer.disconnect();
       window.removeEventListener("resize", resize);
-      document.removeEventListener("visibilitychange", onVisibility);
+      document.removeEventListener("visibilitychange", sync);
     };
   }, [density]);
 
@@ -91,7 +117,7 @@ export function Particles({ density = 0.00008 }: { density?: number }) {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="pointer-events-none absolute inset-0 h-full w-full opacity-60"
+      className="pointer-events-none absolute inset-0 hidden h-full w-full opacity-60 md:block"
     />
   );
 }

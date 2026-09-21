@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
-
+import { Reveal } from "@/components/motion/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { achievements } from "@/lib/data";
 
@@ -18,14 +17,10 @@ export function Achievements() {
         {achievements.map((a, i) => {
           const Icon = a.icon;
           return (
-            <motion.div
+            <Reveal
               key={a.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "0px 0px -10% 0px" }}
-              transition={{ duration: 0.5, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -6 }}
-              className="gradient-border group rounded-2xl p-6 shadow-card"
+              delayIndex={i}
+              className="gradient-border group rounded-2xl p-6 shadow-card transition duration-300 hover:-translate-y-1.5"
             >
               <div className="flex items-center justify-between">
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-tr from-brand/20 to-brand-secondary/20 text-brand ring-1 ring-inset ring-white/10">
@@ -37,7 +32,7 @@ export function Achievements() {
               <p className="mt-1.5 text-sm leading-relaxed text-muted">
                 {a.description}
               </p>
-            </motion.div>
+            </Reveal>
           );
         })}
       </div>

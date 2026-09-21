@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
-
+import { Reveal } from "@/components/motion/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { skillCategories } from "@/lib/data";
@@ -19,14 +18,10 @@ export function Skills() {
         {skillCategories.map((cat, i) => {
           const Icon = cat.icon;
           return (
-            <motion.div
+            <Reveal
               key={cat.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "0px 0px -10% 0px" }}
-              transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -6 }}
-              className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-card transition-colors hover:border-brand/40"
+              delayIndex={i}
+              className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-card transition duration-300 hover:-translate-y-1.5 hover:border-brand/40"
             >
               {/* Hover glow */}
               <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-brand/20 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
@@ -48,7 +43,7 @@ export function Skills() {
                   </Badge>
                 ))}
               </div>
-            </motion.div>
+            </Reveal>
           );
         })}
       </div>

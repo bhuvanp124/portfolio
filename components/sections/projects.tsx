@@ -59,7 +59,10 @@ export function Projects() {
 
       {/* Grid */}
       <motion.div layout className="mt-10 grid gap-6 md:grid-cols-2">
-        <AnimatePresence mode="popLayout">
+        {/* initial={false} => cards render at their settled state on first
+            mount (no opacity:0 in the SSR markup), while filter changes still
+            animate normally. */}
+        <AnimatePresence mode="popLayout" initial={false}>
           {visible.map((p) => (
             <motion.article
               key={p.title}

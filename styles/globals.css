@@ -93,6 +93,18 @@
     border: 1px solid rgba(255, 255, 255, 0.06);
   }
 
+  /* backdrop-filter forces the compositor to re-sample everything behind the
+     element on every frame. That is affordable on a laptop and punishing on a
+     phone, where these surfaces are stacked (nav + hero stats + contact). Swap
+     in a flat tint below md — visually near-identical over a dark ground. */
+  @media (max-width: 767px) {
+    .glass {
+      background: rgba(255, 255, 255, 0.045);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+
   /* Animated gradient border wrapper */
   .gradient-border {
     position: relative;
@@ -103,6 +115,15 @@
     background-size: 100% 100%, 200% 200%;
     border: 1px solid transparent;
     animation: gradient-x 8s ease infinite;
+  }
+
+  /* Five of these animate at once in the achievements grid. An infinite
+     background-position animation repaints each card forever, including while
+     the visitor is scrolling somewhere else entirely. Static on phones. */
+  @media (max-width: 767px) {
+    .gradient-border {
+      animation: none;
+    }
   }
 
   /* Grid background pattern */

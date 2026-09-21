@@ -99,7 +99,11 @@
      in a flat tint below md — visually near-identical over a dark ground. */
   @media (max-width: 767px) {
     .glass {
-      background: rgba(255, 255, 255, 0.045);
+      /* Near-opaque rather than a faint tint: with no backdrop blur, a
+         translucent surface would let the page scroll visibly through the
+         fixed navbar. This is --card at 92%, so it still reads as a raised
+         surface but actually occludes. */
+      background: hsl(240 4% 10% / 0.92);
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
     }

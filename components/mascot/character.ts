@@ -24,6 +24,8 @@ export interface Character {
   grin: THREE.Group;
   ooh: THREE.Mesh;
   arms: Arm[];
+  /** Folded hands for the namaskara greeting; shown in place of the arms. */
+  namaste: THREE.Group;
   gear: { glasses: THREE.Group; headphones: THREE.Group; cap: THREE.Group };
   /** Height of the top of the head above `root`, for anchoring the bubble. */
   headTop: number;
@@ -37,6 +39,15 @@ export const OUTFITS: (keyof Character["gear"])[][] = [
   ["cap"],
   ["glasses", "cap"],
 ];
+
+/** A capsule spanning two points, for limbs that aren't simple rotations. */
+function limb(a: THREE.Vector3, b: THREE.Vector3, radius: number, material: THREE.Material) {
+  const dir = new THREE.Vector3().subVectors(b, a);
+  const mesh = new THREE.Mesh(new THREE.CapsuleGeometry(radius, dir.length(), 8, 16), material);
+  mesh.position.copy(a).add(b).multiplyScalar(0.5);
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+  return mesh;
+}
 
 const mat = (grey: number) =>
   new THREE.MeshLambertMaterial({ color: new THREE.Color(grey, grey, grey) });
@@ -245,6 +256,33 @@ export function buildCharacter(): Character {
   };
   const arms = [makeArm(-1), makeArm(1)];
 
+  // Namaskara: elbows out and low, forearms rising to palms pressed together
+  // in front of the chest, fingers up. These sit inside the body's silhouette,
+  // where the halftone pass draws no outline, so each part gets an ink shell
+  // (a slightly larger back-face copy) to stand out from the shirt.
+  const namaste = new THREE.Group();
+  const ink = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide });
+  const outlined = (mesh: THREE.Mesh, grow: [number, number, number]) => {
+    const shell = new THREE.Mesh(mesh.geometry, ink);
+    shell.scale.set(...grow);
+    mesh.add(shell);
+    return mesh;
+  };
+  for (const side of [-1, 1]) {
+    const shoulder = new THREE.Vector3(side * 1.55, -2.45, 0.2);
+    const elbow = new THREE.Vector3(side * 1.05, -3.45, 0.95);
+    const wrist = new THREE.Vector3(side * 0.17, -2.72, 1.34);
+    namaste.add(outlined(limb(shoulder, elbow, 0.33, shirt), [1.16, 1.02, 1.16]));
+    namaste.add(outlined(limb(elbow, wrist, 0.3, shirt), [1.18, 1.03, 1.18]));
+    const palm = new THREE.Mesh(new THREE.SphereGeometry(0.4, 24, 16), skin);
+    palm.scale.set(0.36, 1.12, 0.75);
+    palm.position.set(side * 0.145, -2.28, 1.42);
+    palm.rotation.x = -0.12;
+    namaste.add(outlined(palm, [1.22, 1.07, 1.1]));
+  }
+  namaste.visible = false;
+  root.add(namaste);
+
   return {
     root,
     head,
@@ -254,6 +292,7 @@ export function buildCharacter(): Character {
     grin,
     ooh,
     arms,
+    namaste,
     gear: { glasses, headphones, cap },
     headTop: 1.05,
   };

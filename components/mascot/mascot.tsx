@@ -165,9 +165,16 @@ export default function Mascot() {
     let halfW = halfH;
     let phone = false;
     let dpr = 1;
+    // Size from the canvas itself, which fills the *visible* viewport. On phones
+    // that changes as the address bar hides and shows; sizing from svh or
+    // innerHeight instead put the badge crop off from the drawn face.
+    let sizedW = 0;
+    let sizedH = 0;
     const resize = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
+      const w = canvas.clientWidth || window.innerWidth;
+      const h = canvas.clientHeight || window.innerHeight;
+      sizedW = w;
+      sizedH = h;
       phone = w < 1024;
       dpr = Math.min(window.devicePixelRatio, 2);
       renderer.setPixelRatio(dpr);
@@ -206,6 +213,9 @@ export default function Mascot() {
     let outfit = 0;
     let dressedByHand = false;
     let trickT = -1;
+    let introStart = -1; // namaskara greeting on first appearance
+    let introDone = false;
+    let eyesShut = false;
     let nextBlink = 2;
     let mouseX = 0;
     let mouseY = 0;
@@ -289,7 +299,7 @@ export default function Mascot() {
     const HEAD_D = 2.44; // head diameter in world units at scale 1
     const BADGE_C = 48; // badge centre, px from the bottom-left corner
     const BADGE_HEAD = 50; // head size inside the badge, px
-    const BADGE_DROP = 7; // head sits a little low so the hair fits, px
+    const BADGE_DROP = 3; // head sits a touch low so the hair fits, px
     const BADGE_R = 30; // clip radius of the badge, px
     let raf = 0;
     applyCue();
@@ -303,8 +313,9 @@ export default function Mascot() {
       // Where the character should be. Desktop: beside the content (or below
       // the fold when "away"). Phones: full-size in the hero, otherwise shrunk
       // into a badge in the bottom-left corner.
-      const W = window.innerWidth;
-      const H = window.innerHeight;
+      if (canvas.clientWidth !== sizedW || canvas.clientHeight !== sizedH) resize();
+      const W = sizedW;
+      const H = sizedH;
       const toWX = (px: number) => ((px / W) * 2 - 1) * halfW;
       const toWY = (py: number) => -((py / H) * 2 - 1) * halfH;
       const sizeFor = (headPx: number) => ((headPx / H) * 2 * halfH) / HEAD_D;
@@ -322,7 +333,8 @@ export default function Mascot() {
         const unit = Math.min(0.2 * H, 0.42 * W);
         ts = sizeFor(unit);
         tx = toWX(W * 0.74);
-        ty = toWY(H - unit) + 0.35 * ts;
+        // Stands taller for the opening namaskara so the folded hands are in view.
+        ty = toWY(H - unit * (introDone ? 1 : 1.8)) + 0.35 * ts;
       } else {
         ts = sizeFor(BADGE_HEAD);
         tx = toWX(BADGE_C);
@@ -371,12 +383,38 @@ export default function Mascot() {
       const lean = THREE.MathUtils.clamp(-vx * 0.035, -0.2, 0.2);
       ch.root.rotation.z += (lean - ch.root.rotation.z) * Math.min(1, dt * 8);
 
+      // Namaskara when the site opens: palms join in front of the chest, a bow
+      // from the waist with eyes closed, back up, then the usual hello wave.
+      const NAMASTE = 2.9;
+      if (!introDone && introStart < 0 && Math.abs(y - ty) < 0.6 && (phone || side !== "away")) {
+        if (reduced) introDone = true;
+        else introStart = t;
+      }
+      const it = introStart >= 0 && !introDone ? t - introStart : -1;
+      if (it >= NAMASTE) {
+        introDone = true;
+        moodSince = t; // so a "hello" section waves right after the greeting
+      }
+      const namaste = it >= 0 && it < NAMASTE;
+      const ease = (from: number, to: number, v: number) => THREE.MathUtils.smoothstep(v, from, to);
+      const handsUp = namaste ? Math.min(ease(0, 0.4, it), 1 - ease(NAMASTE - 0.35, NAMASTE, it)) : 0;
+      const bowAmt = namaste ? Math.min(ease(0.7, 1.4, it), 1 - ease(1.9, 2.5, it)) : 0;
+      const bow = bowAmt * 0.36;
+      ch.namaste.visible = namaste;
+      ch.namaste.position.y = -1.6 * (1 - handsUp); // hands rise in from below
+      // Bend toward the viewer around a pivot near the waist, well below the root.
+      const WAIST = 4.2;
+      ch.root.rotation.x = bow;
+      ch.root.position.y += (Math.cos(bow) - 1) * WAIST * s;
+      ch.root.position.z = Math.sin(bow) * WAIST * s;
+
       // Which pose and face to show right now.
       let pose: Mood = mood === "hello" ? (t - moodSince < 3.2 ? "wave" : "idle") : mood;
-      if (moving || reduced) pose = "idle";
+      // Gestures stay out of the badge, where a raised hand would cover the face.
+      if (moving || reduced || !introDone || inBadge) pose = "idle";
       scrollV *= Math.exp(-dt * 5);
-      const happy = t < cheerUntil || pose === "thumbs";
-      const surprised = !happy && Math.abs(scrollV) > 2200;
+      const happy = !namaste && (t < cheerUntil || pose === "thumbs");
+      const surprised = !namaste && !happy && Math.abs(scrollV) > 2200;
       ch.smile.visible = !happy && !surprised;
       ch.grin.visible = happy;
       ch.ooh.visible = surprised;
@@ -386,7 +424,7 @@ export default function Mascot() {
       // Body turns toward the content; the head follows the pointer, glances
       // the way you're scrolling, and nods when the line changes.
       // In the badge it looks straight out at you.
-      const turnTarget = moving ? Math.sign(vx) * 0.6 : inBadge ? 0 : facing * 0.4;
+      const turnTarget = moving ? Math.sign(vx) * 0.6 : inBadge || namaste ? 0 : facing * 0.4;
       turn += (turnTarget - turn) * Math.min(1, dt * 5);
       if (nodT >= 0) {
         nodT += dt / 0.55;
@@ -395,12 +433,14 @@ export default function Mascot() {
       const nod = nodT >= 0 ? Math.sin(Math.PI * nodT) * 0.22 : 0;
       const scrollLook = THREE.MathUtils.clamp(scrollV / 5000, -0.18, 0.18);
       ch.head.rotation.y += (mouseX * 0.3 - ch.head.rotation.y) * dt * 4;
-      ch.head.rotation.x += (mouseY * 0.18 + scrollLook + nod - ch.head.rotation.x) * Math.min(1, dt * 10);
+      const headPitch = mouseY * 0.18 + scrollLook + nod + bow * 0.6;
+      ch.head.rotation.x += (headPitch - ch.head.rotation.x) * Math.min(1, dt * 10);
       ch.head.rotation.z = reduced ? 0 : Math.sin(t * 0.9) * 0.04;
 
       // Arms. The one on the content side does the gesture; the other rests.
       // An arm hangs down at rotation 0; positive z swings it toward +x.
       for (const arm of ch.arms) {
+        arm.shoulder.visible = !namaste; // the folded hands stand in for them
         const s = arm.side;
         const active = s === facing;
         let sh = s * 0.12 + (reduced ? 0 : Math.sin(t * 1.4 + s) * 0.03);
@@ -439,6 +479,10 @@ export default function Mascot() {
         ch.eyes.forEach((e) => (e.scale.y = 1.15 * Math.max(0.08, sy)));
         if (b >= 0.14) nextBlink = t + 2.5 + Math.random() * 3;
       }
+      // Eyes close through the bow.
+      const shut = bowAmt > 0.35;
+      if (shut || eyesShut) ch.eyes.forEach((e) => (e.scale.y = shut ? 0.12 : 1.15));
+      eyesShut = shut;
 
       renderer.setRenderTarget(target);
       renderer.clear();
@@ -455,20 +499,28 @@ export default function Mascot() {
       const headTop = toPY(y + (ch.headTop + 0.35) * s);
       const headPx = ((HEAD_D * s) / (2 * halfH)) * H;
 
-      // On phones the full-screen canvas is clipped down to the badge circle.
-      if (badge > 0.002) {
+      // The badge crop only closes in once the character has actually shrunk
+      // into the corner; cropping mid-flight left a frameless circle of a big
+      // head floating above the badge. While travelling, it's drawn whole.
+      const toBadge = Math.hypot(hcx - BADGE_C, hcy - (H - BADGE_C + BADGE_DROP));
+      const crop = Math.min(
+        THREE.MathUtils.smoothstep(badge, 0.7, 1),
+        1 - THREE.MathUtils.smoothstep(toBadge, 4, 40),
+      );
+      if (crop > 0.002) {
         const maxR = Math.hypot(W, H);
-        const r = Math.exp(Math.log(maxR) * (1 - badge) + Math.log(BADGE_R) * badge);
-        canvas.style.clipPath = `circle(${r}px at ${hcx}px ${hcy - BADGE_DROP * badge}px)`;
+        const r = Math.exp(Math.log(maxR) * (1 - crop) + Math.log(BADGE_R) * crop);
+        canvas.style.clipPath = `circle(${r}px at ${BADGE_C}px ${H - BADGE_C}px)`;
       } else {
         canvas.style.clipPath = "";
       }
-      disc.style.opacity = String(badge);
+      disc.style.opacity = String(crop);
 
       const settled = !moving && Math.abs(y - ty) < 0.3;
       const present = phone || side !== "away";
       // Standing beside the content the line stays up; from the badge it pops up briefly.
-      const talking = inBadge ? t < showUntil : true;
+      // On phones it stands over the hero text while greeting, so it speaks after.
+      const talking = (inBadge ? t < showUntil : true) && (introDone || !phone);
       const bw = bubble.offsetWidth;
       const left = Math.max(16, Math.min(W - bw - 16, hcx - bw / 2));
       bubble.style.transform = `translate3d(${left}px, ${headTop - bubble.offsetHeight - 14}px, 0)`;
@@ -515,7 +567,7 @@ export default function Mascot() {
         ref={canvasRef}
         aria-hidden
         className={cn(
-          "pointer-events-none fixed inset-0 z-30 h-svh w-screen transition-opacity duration-500",
+          "pointer-events-none fixed inset-0 z-30 h-full w-full transition-opacity duration-500",
           shown ? "opacity-100" : "opacity-0",
         )}
       />

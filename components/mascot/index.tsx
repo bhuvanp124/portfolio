@@ -4,8 +4,8 @@ import dynamic from "next/dynamic";
 import { Component, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
-// three.js loads after the page has hydrated. On phones it waits until the
-// page has fully loaded, so it never competes with the first paint.
+// three.js loads right after the page has hydrated, so the character greets
+// visitors as the site opens. Phones wait a beat so the hero paints first.
 const Mascot = dynamic(() => import("@/components/mascot/mascot"), { ssr: false });
 
 function supportsWebGL() {
@@ -39,16 +39,8 @@ export function MascotLoader() {
       setEnabled(true);
       return;
     }
-    let timer = 0;
-    const later = () => {
-      timer = window.setTimeout(() => setEnabled(true), 1200);
-    };
-    if (document.readyState === "complete") later();
-    else window.addEventListener("load", later, { once: true });
-    return () => {
-      window.removeEventListener("load", later);
-      window.clearTimeout(timer);
-    };
+    const timer = window.setTimeout(() => setEnabled(true), 300);
+    return () => window.clearTimeout(timer);
   }, []);
 
   return enabled ? (

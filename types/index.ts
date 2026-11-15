@@ -24,6 +24,24 @@ export interface ExperienceItem {
   location: string;
   summary: string;
   highlights: string[];
+  /** Name on the collapsed row, when shorter than `company`. */
+  short?: string;
+  /** Years on the collapsed row, e.g. "2022 — 2026". */
+  years?: string;
+  /** Letter tile used in place of a logo. */
+  mark?: { letter: string; bg: string; fg: string };
+  tech?: string[];
+  /** Animated illustrations: one per highlight, or a single one for the role. */
+  scenes?: ExperienceScene[];
+}
+
+export interface ExperienceScene {
+  art: "ship" | "api" | "perf" | "ring";
+  caption: string;
+  /** What the mascot says while this scene shows; *asterisks* highlight. */
+  say: string;
+  /** For "ring": the figure drawn around the ring. */
+  ring?: { value: number; max: number; display: string; label: string };
 }
 
 export type ProjectCategory =

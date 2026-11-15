@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { OUTFITS, buildCharacter } from "@/components/mascot/character";
 import { cn } from "@/lib/utils";
 
-type Side = "left" | "right" | "away";
+type Side = "left" | "right" | "away" | "badge";
 /** "hello" waves for a few seconds on arrival, then settles to idle. */
 type Mood = "idle" | "hello" | "wave" | "point" | "thumbs";
 
@@ -23,7 +23,7 @@ interface Cue {
 
 /**
  * Sections opt in with data attributes:
- *   data-mascot="left|right|away"  data-say="Text with *highlight*"
+ *   data-mascot="left|right|away|badge"  data-say="Text with *highlight*"
  *   data-accent="#hex"             data-bubble="dark"
  *   data-mood="idle|hello|wave|point|thumbs"   data-outfit="<index into OUTFITS>"
  *   data-phone="big"  (phones only: stand full-size instead of the corner badge)
@@ -312,10 +312,13 @@ export default function Mascot() {
       let ty = 0;
       let ts = 0.84;
       let tb = 0;
-      if (!phone) {
+      // The corner badge: always on phones (outside the hero), and on desktop
+      // for sections with no free side to stand beside.
+      const inBadge = phone ? !big : side === "badge";
+      if (!inBadge && !phone) {
         ty = side === "away" ? -9 : 0;
         if (side !== "away") tx = sideX(side);
-      } else if (big) {
+      } else if (!inBadge) {
         const unit = Math.min(0.2 * H, 0.42 * W);
         ts = sizeFor(unit);
         tx = toWX(W * 0.74);
@@ -362,7 +365,7 @@ export default function Mascot() {
       walk += dt * Math.abs(vx) * 1.8;
       const step = Math.abs(Math.sin(walk)) * 0.36 * speed * s;
       // In the badge it faces into the screen; otherwise toward the content.
-      const facing = phone && !big ? 1 : side === "left" ? 1 : -1;
+      const facing = inBadge ? 1 : side === "left" ? 1 : -1;
       const bob = reduced ? 0 : Math.sin(t * 1.6) * 0.07 * (1 - speed) * s;
       ch.root.position.set(x, y + bob + step, 0);
       const lean = THREE.MathUtils.clamp(-vx * 0.035, -0.2, 0.2);
@@ -383,7 +386,7 @@ export default function Mascot() {
       // Body turns toward the content; the head follows the pointer, glances
       // the way you're scrolling, and nods when the line changes.
       // In the badge it looks straight out at you.
-      const turnTarget = moving ? Math.sign(vx) * 0.6 : phone && !big ? 0 : facing * 0.4;
+      const turnTarget = moving ? Math.sign(vx) * 0.6 : inBadge ? 0 : facing * 0.4;
       turn += (turnTarget - turn) * Math.min(1, dt * 5);
       if (nodT >= 0) {
         nodT += dt / 0.55;
@@ -464,8 +467,8 @@ export default function Mascot() {
 
       const settled = !moving && Math.abs(y - ty) < 0.3;
       const present = phone || side !== "away";
-      // Phones: in the hero the line stays up; from the badge it pops up briefly.
-      const talking = phone && !big ? t < showUntil : true;
+      // Standing beside the content the line stays up; from the badge it pops up briefly.
+      const talking = inBadge ? t < showUntil : true;
       const bw = bubble.offsetWidth;
       const left = Math.max(16, Math.min(W - bw - 16, hcx - bw / 2));
       bubble.style.transform = `translate3d(${left}px, ${headTop - bubble.offsetHeight - 14}px, 0)`;

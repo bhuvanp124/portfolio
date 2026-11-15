@@ -14,9 +14,9 @@ export default function HomePage() {
     <main id="main" className="bg-paper font-grotesk text-ink">
       <Hero />
       <About />
+      <Experience />
       <Projects />
       <Skills />
-      <Experience />
       <Achievements />
       <Contact />
       <MascotLoader />

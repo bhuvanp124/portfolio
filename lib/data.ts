@@ -32,9 +32,9 @@ import { siteConfig } from "@/lib/site";
 
 export const navItems: NavItem[] = [
   { label: "About", href: "#about" },
+  { label: "Experience", href: "#experience" },
   { label: "Work", href: "#projects" },
   { label: "Skills", href: "#skills" },
-  { label: "Experience", href: "#experience" },
   { label: "Recognition", href: "#achievements" },
   { label: "Contact", href: "#contact" },
 ];
@@ -141,6 +141,26 @@ export const experience: ExperienceItem[] = [
       "Built application workflows with REST APIs, implementing data validation, error handling, and reliable client-server communication.",
       "Resolved application issues and optimized performance, improving reliability and overall system stability.",
     ],
+    years: "2026",
+    mark: { letter: "M", bg: "#2457f5", fg: "#f7f7f2" },
+    tech: ["Kotlin", "Android", "REST APIs"],
+    scenes: [
+      {
+        art: "ship",
+        caption: "Kotlin · shipped to production",
+        say: "At *MindMatrix* I shipped production Android features in Kotlin.",
+      },
+      {
+        art: "api",
+        caption: "Client ⇄ server · validated",
+        say: "I wired the app to its backend with *REST APIs*, validation and error handling.",
+      },
+      {
+        art: "perf",
+        caption: "Fewer issues · steadier app",
+        say: "Then I hunted down issues and made the app *faster and steadier*.",
+      },
+    ],
   },
   {
     role: "B.E. in Computer Science (Data Science)",
@@ -152,6 +172,18 @@ export const experience: ExperienceItem[] = [
       "Focus on Data Structures & Algorithms, System Design, and Machine Learning.",
       "Active hackathon participant with a strong competitive-programming record.",
     ],
+    short: "RNS Institute of Technology",
+    years: "2022 — 2026",
+    mark: { letter: "R", bg: "#0b0b0c", fg: "#f7f7f2" },
+    tech: ["DSA", "System Design", "Machine Learning"],
+    scenes: [
+      {
+        art: "ring",
+        caption: "B.E. Computer Science (Data Science)",
+        say: "Computer Science at *RNSIT*, graduating with an 8.20 CGPA.",
+        ring: { value: 8.2, max: 10, display: "8.20", label: "CGPA / 10" },
+      },
+    ],
   },
   {
     role: "Pre-University Education (PCMB)",
@@ -161,6 +193,16 @@ export const experience: ExperienceItem[] = [
     summary: "Scored 92% in Physics, Chemistry, Mathematics & Biology.",
     highlights: [
       "Built the mathematical and analytical foundation for an engineering career.",
+    ],
+    years: "2020 — 2022",
+    mark: { letter: "E", bg: "#f6c7a7", fg: "#0b0b0c" },
+    scenes: [
+      {
+        art: "ring",
+        caption: "Pre-university · PCMB",
+        say: "Before that, *92%* in Physics, Chemistry, Maths and Biology.",
+        ring: { value: 92, max: 100, display: "92%", label: "PCMB" },
+      },
     ],
   },
 ];

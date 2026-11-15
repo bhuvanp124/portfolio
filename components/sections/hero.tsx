@@ -18,6 +18,7 @@ export function Hero() {
       className="lines gutter relative flex h-svh min-h-[600px] flex-col overflow-hidden bg-cobalt text-paper"
       data-mascot="right"
       data-mood="hello"
+      data-phone="big"
       data-say="Hey, I'm Bhuvan. Scroll down and I'll *walk you through* it."
     >
       <header className="flex items-start justify-between pt-6 md:pt-7">

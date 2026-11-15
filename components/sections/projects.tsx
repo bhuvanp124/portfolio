@@ -58,16 +58,21 @@ function Scene({ project, index }: { project: Project; index: number }) {
   const scene = project.scene!;
   const n = scene.steps.length;
   const wrapRef = useRef<HTMLDivElement>(null);
-  // Pinned scroll-scrubbing on large screens; on phones and tablets the scene
-  // flows normally (so the extra text is never clipped) and steps auto-advance.
+  // Large screens pin the whole scene while the steps scroll by. Phones and
+  // tablets let the title and key points flow normally and pin only the mock
+  // window, card and rail (the "stage"), so the steps still follow scrolling
+  // without any text being clipped.
+  const stageRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const [pinned, setPinned] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [autoStep, setAutoStep] = useState(0);
-  const step = pinned ? Math.min(n - 1, Math.floor(progress * n)) : autoStep;
-  const rail = pinned ? progress : (autoStep + 1) / n;
+  const [stickyH, setStickyH] = useState(0);
+  const step = Math.min(n - 1, Math.floor(progress * n));
   const card = scene.steps[step].card;
   const flip = index % 2 === 1;
   const href = project.demo ?? project.github;
+  // Phones: the stage is tall enough to give each step half a screen of scrolling.
+  const stageScroll = n * 50; // svh
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
@@ -78,13 +83,28 @@ function Scene({ project, index }: { project: Project; index: number }) {
   }, []);
 
   useEffect(() => {
-    const el = wrapRef.current;
-    if (!pinned || !el) return;
+    const sticky = stickyRef.current;
+    if (pinned || !sticky) return;
+    const ro = new ResizeObserver(() => setStickyH(sticky.offsetHeight));
+    ro.observe(sticky);
+    return () => ro.disconnect();
+  }, [pinned]);
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    const stage = stageRef.current;
+    if (!wrap || !stage) return;
     let frame = 0;
     const update = () => {
       frame = 0;
-      const pinnedFor = el.offsetHeight - window.innerHeight;
-      const p = -el.getBoundingClientRect().top / pinnedFor;
+      let p: number;
+      if (pinned) {
+        p = -wrap.getBoundingClientRect().top / (wrap.offsetHeight - window.innerHeight);
+      } else {
+        const r = stage.getBoundingClientRect();
+        const top = Math.max(16, window.innerHeight / 2 - stickyH / 2);
+        p = (top - r.top) / Math.max(1, r.height - stickyH);
+      }
       setProgress(Math.min(0.9999, Math.max(0, p)));
     };
     const onScroll = () => {
@@ -98,27 +118,7 @@ function Scene({ project, index }: { project: Project; index: number }) {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [pinned]);
-
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (pinned || !el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let id = 0;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        window.clearInterval(id);
-        if (entry.isIntersecting)
-          id = window.setInterval(() => setAutoStep((s) => (s + 1) % n), 3500);
-      },
-      { threshold: 0.4 },
-    );
-    io.observe(el);
-    return () => {
-      io.disconnect();
-      window.clearInterval(id);
-    };
-  }, [pinned, n]);
+  }, [pinned, stickyH]);
 
   return (
     <div
@@ -129,6 +129,19 @@ function Scene({ project, index }: { project: Project; index: number }) {
         background: scene.color,
       }}
     >
+      {/* Phones: one marker for the whole scene, following the current step. */}
+      {!pinned && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          data-mascot="right"
+          data-say={scene.steps[step].say}
+          data-accent={scene.accent}
+          data-mood={step === 0 ? "point" : step === n - 1 ? "thumbs" : "idle"}
+          data-outfit={scene.outfit}
+        />
+      )}
+
       {/* One marker per step tells the mascot what to say. */}
       {pinned &&
         scene.steps.map((s, i) => (
@@ -180,66 +193,78 @@ function Scene({ project, index }: { project: Project; index: number }) {
               </ul>
             )}
 
-            <div className="relative mt-7">
-              <Window scene={scene} step={step} />
-              <div
-                key={step}
-                className={cn(
-                  "relative z-10 mt-5 w-[min(300px,100%)] animate-fade-up sm:absolute sm:-bottom-10 sm:mt-0",
-                  flip ? "sm:-right-6" : "sm:-left-6",
-                )}
-              >
-                <div
-                  aria-hidden
-                  className="absolute inset-0 translate-x-1.5 translate-y-1.5 rounded-2xl [background:radial-gradient(circle,#0b0b0c_0.95px,transparent_1.15px)_0_0/3px_3px]"
-                />
-                <div className="relative rounded-2xl bg-paper px-5 py-4 shadow-[0_24px_40px_-24px_rgba(11,11,12,0.45)]">
-                  <p className="text-[0.68rem] font-medium uppercase tracking-[0.14em] text-ink/65">
-                    {card.label}
-                  </p>
-                  <p className="display mt-1.5 text-[1.3rem] leading-[1.05] tracking-[-0.03em]">
-                    {card.title}
-                  </p>
-                  {card.sub && <p className="mt-1 text-[0.82rem] text-ink/70">{card.sub}</p>}
-                </div>
-              </div>
-            </div>
-
             <div
-              className={cn(
-                "mt-8 flex flex-wrap items-center gap-x-8 gap-y-4 sm:mt-14",
-                // Keep the button on the side away from the mascot's pointing hand.
-                flip ? "justify-between" : "justify-start",
-              )}
+              ref={stageRef}
+              className="relative mt-7"
+              style={pinned ? undefined : { height: `calc(${stickyH}px + ${stageScroll}svh)` }}
             >
-              <div className="flex items-center gap-4">
-                <div className="h-[2px] w-40 overflow-hidden rounded-full bg-ink/15">
+              <div
+                ref={stickyRef}
+                className={cn(!pinned && "sticky")}
+                style={pinned ? undefined : { top: `max(16px, calc(50svh - ${stickyH / 2}px))` }}
+              >
+                <div className="relative">
+                  <Window scene={scene} step={step} />
                   <div
-                    className="h-full bg-ink transition-[width] duration-300"
-                    style={{ width: `${rail * 100}%` }}
-                  />
-                </div>
-                <span className="font-mono text-[0.7rem] text-ink/50">
-                  {step + 1} / {n}
-                </span>
-              </div>
-              {href && (
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn("pill shrink-0", !flip && "order-first")}
-                >
-                  <span className="pill__face">
-                    {project.demo ? "View project" : (
-                      <>
-                        <Github className="h-4 w-4" aria-hidden /> View code
-                      </>
+                    key={step}
+                    className={cn(
+                      "relative z-10 mt-5 w-[min(300px,100%)] animate-fade-up sm:absolute sm:-bottom-10 sm:mt-0",
+                      flip ? "sm:-right-6" : "sm:-left-6",
                     )}
-                    <ArrowRight className="arrow h-4 w-4" aria-hidden />
-                  </span>
-                </a>
-              )}
+                  >
+                    <div
+                      aria-hidden
+                      className="absolute inset-0 translate-x-1.5 translate-y-1.5 rounded-2xl [background:radial-gradient(circle,#0b0b0c_0.95px,transparent_1.15px)_0_0/3px_3px]"
+                    />
+                    <div className="relative min-h-[7.5rem] rounded-2xl bg-paper px-5 py-4 shadow-[0_24px_40px_-24px_rgba(11,11,12,0.45)] sm:min-h-0">
+                      <p className="text-[0.68rem] font-medium uppercase tracking-[0.14em] text-ink/65">
+                        {card.label}
+                      </p>
+                      <p className="display mt-1.5 text-[1.3rem] leading-[1.05] tracking-[-0.03em]">
+                        {card.title}
+                      </p>
+                      {card.sub && <p className="mt-1 text-[0.82rem] text-ink/70">{card.sub}</p>}
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className={cn(
+                    "mt-8 flex flex-wrap items-center gap-x-8 gap-y-4 sm:mt-14",
+                    // Keep the button on the side away from the mascot's pointing hand.
+                    flip ? "justify-between" : "justify-start",
+                  )}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="h-[2px] w-40 overflow-hidden rounded-full bg-ink/15">
+                      <div
+                        className="h-full bg-ink transition-[width] duration-300"
+                        style={{ width: `${progress * 100}%` }}
+                      />
+                    </div>
+                    <span className="font-mono text-[0.7rem] text-ink/50">
+                      {step + 1} / {n}
+                    </span>
+                  </div>
+                  {href && (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn("pill shrink-0", !flip && "order-first")}
+                    >
+                      <span className="pill__face">
+                        {project.demo ? "View project" : (
+                          <>
+                            <Github className="h-4 w-4" aria-hidden /> View code
+                          </>
+                        )}
+                        <ArrowRight className="arrow h-4 w-4" aria-hidden />
+                      </span>
+                    </a>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>

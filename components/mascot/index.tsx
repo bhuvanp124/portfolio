@@ -4,8 +4,8 @@ import dynamic from "next/dynamic";
 import { Component, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
-// three.js only loads on screens wide enough to show the character beside the
-// content, and only after the page itself has hydrated.
+// three.js loads after the page has hydrated. On phones it waits until the
+// page has fully loaded, so it never competes with the first paint.
 const Mascot = dynamic(() => import("@/components/mascot/mascot"), { ssr: false });
 
 function supportsWebGL() {
@@ -35,11 +35,20 @@ export function MascotLoader() {
 
   useEffect(() => {
     if (!supportsWebGL()) return;
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const update = () => setEnabled(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
+    if (window.matchMedia("(min-width: 1024px)").matches) {
+      setEnabled(true);
+      return;
+    }
+    let timer = 0;
+    const later = () => {
+      timer = window.setTimeout(() => setEnabled(true), 1200);
+    };
+    if (document.readyState === "complete") later();
+    else window.addEventListener("load", later, { once: true });
+    return () => {
+      window.removeEventListener("load", later);
+      window.clearTimeout(timer);
+    };
   }, []);
 
   return enabled ? (

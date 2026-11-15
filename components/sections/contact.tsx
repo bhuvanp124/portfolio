@@ -94,14 +94,14 @@ export function Contact() {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event("mascot:dress"))}
-            className="hidden underline-offset-4 hover:text-paper hover:underline lg:inline"
+            className="underline-offset-4 hover:text-paper hover:underline"
           >
             Dress me up
           </button>
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event("mascot:trick"))}
-            className="hidden underline-offset-4 hover:text-paper hover:underline lg:inline"
+            className="underline-offset-4 hover:text-paper hover:underline"
           >
             Do a trick
           </button>

@@ -17,6 +17,8 @@ interface Cue {
   dark: boolean;
   mood: Mood;
   outfit: number;
+  /** On phones, stand full-size here (the hero) instead of sitting in the badge. */
+  big: boolean;
 }
 
 /**
@@ -24,6 +26,7 @@ interface Cue {
  *   data-mascot="left|right|away"  data-say="Text with *highlight*"
  *   data-accent="#hex"             data-bubble="dark"
  *   data-mood="idle|hello|wave|point|thumbs"   data-outfit="<index into OUTFITS>"
+ *   data-phone="big"  (phones only: stand full-size instead of the corner badge)
  * The innermost marker that spans the middle of the viewport wins.
  */
 function readCue(): Cue {
@@ -33,7 +36,7 @@ function readCue(): Cue {
     const r = el.getBoundingClientRect();
     if (r.top <= mid && r.bottom > mid) hit = el;
   });
-  if (!hit) return { side: "away", say: "", dark: false, mood: "idle", outfit: 0 };
+  if (!hit) return { side: "away", say: "", dark: false, mood: "idle", outfit: 0, big: false };
   const el = hit as HTMLElement;
   return {
     side: (el.dataset.mascot as Side) ?? "away",
@@ -42,6 +45,7 @@ function readCue(): Cue {
     dark: el.dataset.bubble === "dark",
     mood: (el.dataset.mood as Mood) ?? "idle",
     outfit: Number(el.dataset.outfit ?? 0),
+    big: el.dataset.phone === "big",
   };
 }
 
@@ -100,13 +104,22 @@ export default function Mascot() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bubbleRef = useRef<HTMLDivElement>(null);
   const hitRef = useRef<HTMLButtonElement>(null);
-  const [cue, setCue] = useState<Cue>({ side: "away", say: "", dark: false, mood: "idle", outfit: 0 });
+  const discRef = useRef<HTMLDivElement>(null);
+  const [cue, setCue] = useState<Cue>({
+    side: "away",
+    say: "",
+    dark: false,
+    mood: "idle",
+    outfit: 0,
+    big: false,
+  });
   const [shown, setShown] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current!;
     const bubble = bubbleRef.current!;
     const hit = hitRef.current!;
+    const disc = discRef.current!;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // WebGL can be missing or disabled; without it, the character simply
@@ -118,8 +131,6 @@ export default function Mascot() {
       return;
     }
     renderer.setClearColor(0x000000, 0);
-    const dpr = Math.min(window.devicePixelRatio, 2);
-    renderer.setPixelRatio(dpr);
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
@@ -132,8 +143,6 @@ export default function Mascot() {
     scene.add(key);
 
     const ch = buildCharacter();
-    const SCALE = 0.84;
-    ch.root.scale.setScalar(SCALE);
     scene.add(ch.root);
 
     const target = new THREE.WebGLRenderTarget(1, 1);
@@ -144,7 +153,7 @@ export default function Mascot() {
       uniforms: {
         tScene: { value: target.texture },
         res: { value: new THREE.Vector2() },
-        cell: { value: 4 * dpr },
+        cell: { value: 4 },
         ink: { value: new THREE.Vector3(0.043, 0.043, 0.047) },
         paper: { value: new THREE.Vector3(0.969, 0.969, 0.949) },
       },
@@ -154,9 +163,14 @@ export default function Mascot() {
     const quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
     let halfW = halfH;
+    let phone = false;
+    let dpr = 1;
     const resize = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
+      phone = w < 1024;
+      dpr = Math.min(window.devicePixelRatio, 2);
+      renderer.setPixelRatio(dpr);
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
@@ -170,9 +184,16 @@ export default function Mascot() {
 
     /* ---- state ------------------------------------------------------------ */
     let side: Side = "away";
+    let big = false;
+    // Position (world units) and size, each on its own spring.
     let x = 0;
     let y = -9; // starts below the fold and pops up
-    let vx = 0; // horizontal velocity while gliding between sides
+    let s = 0.84;
+    let vx = 0;
+    let vy = 0;
+    let vs = 0;
+    let badge = 0; // 0 = full character, 1 = shrunk into the corner badge (phones)
+    let showUntil = 0; // phones: the bubble only shows for a moment
     let walk = 0; // phase of the little step-bounce while gliding
     let mood: Mood = "idle";
     let moodSince = 0;
@@ -203,6 +224,7 @@ export default function Mascot() {
     const applyCue = () => {
       const c = readCue();
       side = c.side;
+      big = c.big;
       if (c.mood !== mood) {
         mood = c.mood;
         moodSince = clock.getElapsedTime();
@@ -210,6 +232,7 @@ export default function Mascot() {
       if (c.say !== lastSay) {
         lastSay = c.say;
         if (nodT < 0) nodT = 0;
+        showUntil = clock.getElapsedTime() + 4;
       }
       if (!dressedByHand && c.outfit !== outfit) wear(c.outfit);
       const key = `${c.side}|${c.say}|${c.dark}`;
@@ -233,6 +256,8 @@ export default function Mascot() {
         });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
+    // Phone project scenes advance on a timer, not on scroll.
+    const poll = window.setInterval(applyCue, 600);
 
     const onMove = (e: PointerEvent) => {
       mouseX = (e.clientX / window.innerWidth) * 2 - 1;
@@ -252,12 +277,20 @@ export default function Mascot() {
       wear(outfit + 1);
       cheer(1.6);
     };
+    const tap = () => {
+      trick();
+      showUntil = clock.getElapsedTime() + 4;
+    };
     window.addEventListener("mascot:trick", trick);
     window.addEventListener("mascot:dress", dress);
-    hit.addEventListener("click", trick);
+    hit.addEventListener("click", tap);
 
     /* ---- loop ------------------------------------------------------------- */
-    const headWorld = new THREE.Vector3();
+    const HEAD_D = 2.44; // head diameter in world units at scale 1
+    const BADGE_C = 48; // badge centre, px from the bottom-left corner
+    const BADGE_HEAD = 50; // head size inside the badge, px
+    const BADGE_DROP = 7; // head sits a little low so the hair fits, px
+    const BADGE_R = 30; // clip radius of the badge, px
     let raf = 0;
     applyCue();
     setShown(true);
@@ -267,33 +300,70 @@ export default function Mascot() {
       const dt = Math.min(clock.getDelta(), 0.05);
       const t = clock.getElapsedTime();
 
-      // Swapping sides: glide across on a critically damped spring, so it
-      // eases out, travels, and settles without overshooting.
-      const restY = side === "away" ? -9 : 0;
-      if (side !== "away") {
-        const tx = sideX(side);
+      // Where the character should be. Desktop: beside the content (or below
+      // the fold when "away"). Phones: full-size in the hero, otherwise shrunk
+      // into a badge in the bottom-left corner.
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      const toWX = (px: number) => ((px / W) * 2 - 1) * halfW;
+      const toWY = (py: number) => -((py / H) * 2 - 1) * halfH;
+      const sizeFor = (headPx: number) => ((headPx / H) * 2 * halfH) / HEAD_D;
+      let tx = x;
+      let ty = 0;
+      let ts = 0.84;
+      let tb = 0;
+      if (!phone) {
+        ty = side === "away" ? -9 : 0;
+        if (side !== "away") tx = sideX(side);
+      } else if (big) {
+        const unit = Math.min(0.2 * H, 0.42 * W);
+        ts = sizeFor(unit);
+        tx = toWX(W * 0.74);
+        ty = toWY(H - unit) + 0.35 * ts;
+      } else {
+        ts = sizeFor(BADGE_HEAD);
+        tx = toWX(BADGE_C);
+        ty = toWY(H - BADGE_C + BADGE_DROP) + 0.35 * ts;
+        tb = 1;
+      }
+
+      // Everything glides on critically damped springs: eases out, travels,
+      // and settles without overshooting.
+      if (reduced) {
+        x = tx;
+        y = ty;
+        s = ts;
+        vx = vy = vs = 0;
+      } else {
         if (y < -6) {
           // Still below the fold: rise in place rather than sliding in.
           x = tx;
-          vx = 0;
-        } else if (reduced) {
-          x = tx;
-        } else {
-          const k = 22;
-          vx += ((tx - x) * k - vx * 2 * Math.sqrt(k)) * dt;
-          x += vx * dt;
+          s = ts;
+          vx = vs = 0;
         }
+        const k = 22;
+        const c = 2 * Math.sqrt(k);
+        vx += ((tx - x) * k - vx * c) * dt;
+        vy += ((ty - y) * k - vy * c) * dt;
+        vs += ((ts - s) * k - vs * c) * dt;
+        x += vx * dt;
+        y += vy * dt;
+        s += vs * dt;
       }
-      y += (restY - y) * Math.min(1, dt * (reduced ? 60 : 6));
+      badge += (tb - badge) * Math.min(1, dt * (reduced ? 60 : 6));
+      // Finer dots in the small badge so the face stays readable.
+      post.uniforms.cell.value = (4 - 2 * badge) * dpr;
+      ch.root.scale.setScalar(s);
       const speed = Math.min(1, Math.abs(vx) / 6);
       const moving = speed > 0.12;
 
       // While gliding: a small step-bounce and a lean into the direction of
       // travel. At rest: idle bob, head follows the pointer and the content.
       walk += dt * Math.abs(vx) * 1.8;
-      const step = Math.abs(Math.sin(walk)) * 0.3 * speed;
-      const facing = side === "left" ? 1 : -1;
-      const bob = reduced ? 0 : Math.sin(t * 1.6) * 0.06 * (1 - speed);
+      const step = Math.abs(Math.sin(walk)) * 0.36 * speed * s;
+      // In the badge it faces into the screen; otherwise toward the content.
+      const facing = phone && !big ? 1 : side === "left" ? 1 : -1;
+      const bob = reduced ? 0 : Math.sin(t * 1.6) * 0.07 * (1 - speed) * s;
       ch.root.position.set(x, y + bob + step, 0);
       const lean = THREE.MathUtils.clamp(-vx * 0.035, -0.2, 0.2);
       ch.root.rotation.z += (lean - ch.root.rotation.z) * Math.min(1, dt * 8);
@@ -312,7 +382,8 @@ export default function Mascot() {
 
       // Body turns toward the content; the head follows the pointer, glances
       // the way you're scrolling, and nods when the line changes.
-      const turnTarget = moving ? Math.sign(vx) * 0.6 : facing * 0.4;
+      // In the badge it looks straight out at you.
+      const turnTarget = moving ? Math.sign(vx) * 0.6 : phone && !big ? 0 : facing * 0.4;
       turn += (turnTarget - turn) * Math.min(1, dt * 5);
       if (nodT >= 0) {
         nodT += dt / 0.55;
@@ -353,7 +424,7 @@ export default function Mascot() {
         trickT += dt / 1.0;
         const k = Math.min(trickT, 1);
         spin = k * Math.PI * 2;
-        ch.root.position.y += Math.sin(Math.PI * k) * 1.4;
+        ch.root.position.y += Math.sin(Math.PI * k) * 1.6 * s;
         if (trickT >= 1) trickT = -1;
       }
       ch.root.rotation.y = turn + spin;
@@ -373,33 +444,51 @@ export default function Mascot() {
       renderer.clear();
       renderer.render(quadScene, quadCam);
 
-      // Anchor the bubble and the click target to the head.
-      headWorld.set(ch.root.position.x, ch.root.position.y + (ch.headTop + 0.35) * SCALE, 0).project(camera);
-      const hx = (headWorld.x * 0.5 + 0.5) * window.innerWidth;
-      const hy = (-headWorld.y * 0.5 + 0.5) * window.innerHeight;
-      const bw = bubble.offsetWidth;
-      const left = Math.max(16, Math.min(window.innerWidth - bw - 16, hx - bw / 2));
-      bubble.style.transform = `translate3d(${left}px, ${hy - bubble.offsetHeight - 14}px, 0)`;
-      bubble.style.setProperty("--tail", `${hx - left}px`);
-      const visible = side !== "away" && !moving && Math.abs(y) < 0.5;
-      bubble.classList.toggle("is-on", visible && lastSay !== "");
+      // Screen position of the head, for the bubble, badge clip and tap target.
+      const toPX = (wx: number) => ((wx / halfW + 1) / 2) * W;
+      const toPY = (wy: number) => ((1 - wy / halfH) / 2) * H;
+      const hcx = toPX(x);
+      const hcy = toPY(y - 0.35 * s);
+      const headTop = toPY(y + (ch.headTop + 0.35) * s);
+      const headPx = ((HEAD_D * s) / (2 * halfH)) * H;
 
-      const headPx = ((2.6 * SCALE) / (halfH * 2)) * window.innerHeight;
-      hit.style.transform = `translate3d(${hx - headPx / 2}px, ${hy + 10}px, 0)`;
-      hit.style.width = hit.style.height = `${headPx}px`;
-      hit.style.pointerEvents = visible ? "auto" : "none";
+      // On phones the full-screen canvas is clipped down to the badge circle.
+      if (badge > 0.002) {
+        const maxR = Math.hypot(W, H);
+        const r = Math.exp(Math.log(maxR) * (1 - badge) + Math.log(BADGE_R) * badge);
+        canvas.style.clipPath = `circle(${r}px at ${hcx}px ${hcy - BADGE_DROP * badge}px)`;
+      } else {
+        canvas.style.clipPath = "";
+      }
+      disc.style.opacity = String(badge);
+
+      const settled = !moving && Math.abs(y - ty) < 0.3;
+      const present = phone || side !== "away";
+      // Phones: in the hero the line stays up; from the badge it pops up briefly.
+      const talking = phone && !big ? t < showUntil : true;
+      const bw = bubble.offsetWidth;
+      const left = Math.max(16, Math.min(W - bw - 16, hcx - bw / 2));
+      bubble.style.transform = `translate3d(${left}px, ${headTop - bubble.offsetHeight - 14}px, 0)`;
+      bubble.style.setProperty("--tail", `${hcx - left}px`);
+      bubble.classList.toggle("is-on", present && settled && talking && lastSay !== "");
+
+      const hitPx = Math.max(headPx, 56);
+      hit.style.transform = `translate3d(${hcx - hitPx / 2}px, ${hcy - hitPx / 2}px, 0)`;
+      hit.style.width = hit.style.height = `${hitPx}px`;
+      hit.style.pointerEvents = present && settled ? "auto" : "none";
     };
     tick();
 
     return () => {
       cancelAnimationFrame(raf);
       cancelAnimationFrame(cueFrame);
+      window.clearInterval(poll);
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("mascot:trick", trick);
       window.removeEventListener("mascot:dress", dress);
-      hit.removeEventListener("click", trick);
+      hit.removeEventListener("click", tap);
       target.dispose();
       post.dispose();
       renderer.dispose();
@@ -414,6 +503,11 @@ export default function Mascot() {
 
   return (
     <>
+      <div
+        ref={discRef}
+        aria-hidden
+        className="mascot-disc pointer-events-none fixed bottom-4 left-4 z-[29] h-16 w-16 rounded-full opacity-0"
+      />
       <canvas
         ref={canvasRef}
         aria-hidden

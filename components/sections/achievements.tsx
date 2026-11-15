@@ -1,40 +1,27 @@
-"use client";
-
 import { Reveal } from "@/components/motion/reveal";
-import { SectionHeading } from "@/components/section-heading";
 import { achievements } from "@/lib/data";
 
 export function Achievements() {
   return (
-    <section id="achievements" className="container scroll-mt-24 py-24 md:py-32">
-      <SectionHeading
-        eyebrow="Achievements"
-        title="Milestones & recognition"
-        description="A few highlights I'm proud of along the way."
-      />
+    <section
+      id="achievements"
+      className="lines gutter relative scroll-mt-0 border-t border-white/10 bg-ink pb-32 pt-24 text-paper"
+      data-mascot="right"
+      data-mood="thumbs"
+      data-say="A few things I'm *proud of*."
+    >
+      <h2 className="display text-[clamp(2.8rem,6.2vw,6rem)]">Recognition</h2>
 
-      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {achievements.map((a, i) => {
-          const Icon = a.icon;
-          return (
-            <Reveal
-              key={a.title}
-              delayIndex={i}
-              className="gradient-border group rounded-2xl p-6 shadow-card transition duration-300 hover:-translate-y-1.5"
-            >
-              <div className="flex items-center justify-between">
-                <span className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-tr from-brand/20 to-brand-secondary/20 text-brand ring-1 ring-inset ring-white/10">
-                  <Icon className="h-5 w-5" />
-                </span>
-                {a.date && <span className="text-xs text-muted">{a.date}</span>}
-              </div>
-              <h3 className="mt-4 text-base font-semibold">{a.title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted">
-                {a.description}
-              </p>
-            </Reveal>
-          );
-        })}
+      <div className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2 lg:w-[66%]">
+        {achievements.map(({ title, description, icon: Icon }, i) => (
+          <Reveal key={title} delayIndex={i} className="bg-ink p-7">
+            <Icon className="h-6 w-6 text-cobalt-light" aria-hidden />
+            <h3 className="mt-6 display text-[1.6rem] leading-[1] tracking-[-0.03em]">
+              {title}
+            </h3>
+            <p className="mt-3 text-[0.95rem] leading-relaxed text-paper/55">{description}</p>
+          </Reveal>
+        ))}
       </div>
     </section>
   );

@@ -140,3 +140,197 @@
     -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Home page — light "paper" design language                                 */
+/* -------------------------------------------------------------------------- */
+
+@layer components {
+  .display {
+    font-family: var(--font-funnel), "Helvetica Neue", Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 0.9;
+  }
+
+  .gutter {
+    padding-inline: 16px;
+  }
+  @media (min-width: 768px) {
+    .gutter {
+      padding-inline: 40px;
+    }
+  }
+
+  /* Faint vertical column rules, aligned to the gutter. */
+  .lines {
+    --line: rgba(255, 255, 255, 0.1);
+    --cols: 6;
+    --gut: 16px;
+    background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
+    background-size: calc((100% - 2 * var(--gut)) / var(--cols)) 100%;
+    background-position: var(--gut) 0;
+  }
+  .lines--dark {
+    --line: rgba(11, 11, 12, 0.07);
+  }
+  @media (min-width: 768px) {
+    .lines {
+      --cols: 12;
+      --gut: 40px;
+    }
+  }
+
+  /* Pill button with an offset halftone shadow that closes on hover. */
+  .pill {
+    --dot: #0b0b0c;
+    position: relative;
+    display: inline-flex;
+    border-radius: 999px;
+  }
+  .pill::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle, var(--dot) 0.95px, transparent 1.15px) 0 0 / 3px 3px;
+    transform: translate(4px, 4px);
+    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .pill__face {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    border-radius: inherit;
+    background: #f7f7f2;
+    color: #0b0b0c;
+    padding: 0.72rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .pill--ink .pill__face {
+    background: #0b0b0c;
+    color: #f7f7f2;
+  }
+  .pill--ink {
+    --dot: #2457f5;
+  }
+  .pill:hover::before,
+  .pill:focus-visible::before,
+  .pill:hover .pill__face,
+  .pill:focus-visible .pill__face {
+    transform: translate(2px, 2px);
+  }
+  .pill .arrow {
+    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .pill:hover .arrow {
+    transform: translateX(3px);
+  }
+  .pill--down:hover .arrow {
+    transform: translateY(3px);
+  }
+
+  /* Halftone fade used where one coloured section hands off to the next. */
+  .edge {
+    pointer-events: none;
+    position: absolute;
+    inset: auto 0 -1px;
+    z-index: 1;
+    height: 44px;
+    background: radial-gradient(circle, var(--edge) 1.25px, transparent 1.45px) 0 0 / 4px 4px;
+    -webkit-mask: linear-gradient(transparent, #000 85%);
+    mask: linear-gradient(transparent, #000 85%);
+  }
+  .edge::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 10px;
+    background: var(--edge);
+  }
+
+  /* Line-by-line masked entrance for big display type. */
+  .rise {
+    display: block;
+    overflow: hidden;
+    margin-bottom: -0.06em;
+    padding-bottom: 0.06em;
+  }
+
+  .grain {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    background: radial-gradient(circle, rgba(11, 11, 12, 0.07) 0.8px, transparent 1px) 0 0 / 4px 4px;
+    -webkit-mask: linear-gradient(#000, transparent 30% 70%, #000);
+    mask: linear-gradient(#000, transparent 30% 70%, #000);
+  }
+}
+
+@layer components {
+  /* Mascot speech bubble: paper card, halftone shadow, tail pointing down. */
+  .bubble {
+    --bubble-dot: #0b0b0c;
+    max-width: min(25rem, calc(100vw - 32px));
+    opacity: 0;
+    transition: opacity 0.3s;
+    will-change: transform;
+  }
+  .bubble.is-on {
+    opacity: 1;
+  }
+  .bubble::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: radial-gradient(circle, var(--bubble-dot) 0.95px, transparent 1.15px) 0 0 / 3px 3px;
+    opacity: 0.8;
+    transform: translate(5px, 5px);
+  }
+  .bubble__text {
+    position: relative;
+    border-radius: 18px;
+    background: #f7f7f2;
+    color: #0b0b0c;
+    padding: 0.8rem 1.15rem 0.85rem;
+    font: 600 clamp(1.05rem, 1.5vw, 1.4rem) / 1.18 var(--font-funnel), sans-serif;
+    letter-spacing: -0.02em;
+    animation: bubble-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .bubble__text::after {
+    content: "";
+    position: absolute;
+    top: calc(100% - 1px);
+    left: var(--tail, 50%);
+    width: 22px;
+    height: 12px;
+    background: inherit;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform: translateX(-50%);
+  }
+  .bubble-accent {
+    color: #2457f5;
+  }
+  .bubble[data-theme="dark"] {
+    --bubble-dot: #2457f5;
+  }
+  .bubble[data-theme="dark"] .bubble__text {
+    background: #0b0b0c;
+    color: #f7f7f2;
+  }
+  .bubble[data-theme="dark"] .bubble-accent {
+    color: #6f93ff;
+  }
+
+  @keyframes bubble-in {
+    from {
+      opacity: 0.2;
+      transform: translateY(6px) scale(0.97);
+    }
+  }
+}

@@ -1,157 +1,106 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Check, Code2, Github, Linkedin, Mail, MapPin, Send } from "lucide-react";
+import { ArrowUpRight, Check, Copy, FileText } from "lucide-react";
 import { useState } from "react";
 
-import { Reveal } from "@/components/motion/reveal";
-import { SectionHeading } from "@/components/section-heading";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { siteConfig } from "@/lib/site";
 
-type Status = "idle" | "sending" | "sent";
+const links = [
+  { label: "LinkedIn", href: siteConfig.handles.linkedin },
+  { label: "GitHub", href: siteConfig.handles.github },
+  { label: "LeetCode", href: siteConfig.handles.leetcode },
+];
 
 export function Contact() {
-  const [status, setStatus] = useState<Status>("idle");
+  const [copied, setCopied] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus("sending");
-
-    const form = new FormData(e.currentTarget);
-    const name = String(form.get("name") ?? "");
-    const email = String(form.get("email") ?? "");
-    const message = String(form.get("message") ?? "");
-
-    // TODO: Wire this to a real backend (e.g. Resend, Formspree, or a Next.js
-    // Route Handler at app/api/contact/route.ts). For now we open the user's
-    // email client with a prefilled message — works with zero backend.
-    const subject = encodeURIComponent(`Portfolio inquiry from ${name}`);
-    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
-    window.location.href = `mailto:${siteConfig.email}?subject=${subject}&body=${body}`;
-
-    setTimeout(() => setStatus("sent"), 600);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(siteConfig.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      window.location.href = `mailto:${siteConfig.email}`;
+    }
   };
 
   return (
-    <section id="contact" className="container scroll-mt-24 py-24 md:py-32">
-      <div className="grid gap-12 md:grid-cols-2 md:items-center">
-        <div>
-          <SectionHeading
-            eyebrow="Contact"
-            title="Let's build something"
-            description="Have a role, a project, or just want to say hi? My inbox is always open."
-          />
+    <section
+      id="contact"
+      className="lines gutter relative flex min-h-svh scroll-mt-0 flex-col bg-cobalt pt-32 text-paper"
+      data-mascot="right"
+      data-mood="wave"
+      data-say="Psst. You can *click me*."
+    >
+      <p className="text-[.8rem] font-medium uppercase tracking-[0.14em] text-paper/60">
+        Contact
+      </p>
+      <h2 className="display mt-6 text-[clamp(3.4rem,10.4vw,10rem)]">
+        Got a role
+        <span className="block font-light">in mind?</span>
+      </h2>
 
-          <div className="mt-8 flex flex-col gap-3">
-            <a
-              href={`mailto:${siteConfig.email}`}
-              className="glass group flex items-center gap-3 rounded-xl p-4 transition-colors hover:border-brand/40"
-            >
-              <Mail className="h-5 w-5 text-brand" />
-              <span className="text-sm text-foreground">{siteConfig.email}</span>
-            </a>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <a
-                href={siteConfig.handles.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass flex items-center gap-3 rounded-xl p-4 transition-colors hover:border-brand/40"
-              >
-                <Github className="h-5 w-5 text-brand" />
-                <span className="text-sm text-foreground">GitHub</span>
-              </a>
-              <a
-                href={siteConfig.handles.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass flex items-center gap-3 rounded-xl p-4 transition-colors hover:border-brand/40"
-              >
-                <Linkedin className="h-5 w-5 text-brand" />
-                <span className="text-sm text-foreground">LinkedIn</span>
-              </a>
-              <a
-                href={siteConfig.handles.leetcode}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass flex items-center gap-3 rounded-xl p-4 transition-colors hover:border-brand/40"
-              >
-                <Code2 className="h-5 w-5 text-brand" />
-                <span className="text-sm text-foreground">LeetCode</span>
-              </a>
-            </div>
-            <div className="flex items-center gap-2 pl-1 text-sm text-muted">
-              <MapPin className="h-4 w-4 text-brand" />
-              {siteConfig.location}
-            </div>
-          </div>
-        </div>
+      <button
+        type="button"
+        onClick={copy}
+        className="group mt-12 flex w-fit items-center gap-4 text-left"
+        aria-label={`Copy email address ${siteConfig.email}`}
+      >
+        <span className="display break-all text-[clamp(1.5rem,3.4vw,3rem)] tracking-[-0.03em] underline decoration-paper/30 decoration-2 underline-offset-[0.2em] transition-colors group-hover:decoration-paper">
+          {siteConfig.email}
+        </span>
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-paper text-ink">
+          {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+        </span>
+      </button>
+      <p className="mt-3 h-5 text-sm text-paper/60" aria-live="polite">
+        {copied ? "Copied to clipboard" : "Click to copy"}
+      </p>
 
-        <Reveal>
-          <form
-            onSubmit={handleSubmit}
-            className="rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8"
+      <div className="mt-10 flex flex-wrap gap-4">
+        {links.map((l) => (
+          <a
+            key={l.label}
+            href={l.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="pill"
           >
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <label htmlFor="name" className="text-sm font-medium">
-                  Name
-                </label>
-                <Input id="name" name="name" required placeholder="Ada Lovelace" />
-              </div>
-              <div className="grid gap-2">
-                <label htmlFor="email" className="text-sm font-medium">
-                  Email
-                </label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="ada@example.com"
-                />
-              </div>
-              <div className="grid gap-2">
-                <label htmlFor="message" className="text-sm font-medium">
-                  Message
-                </label>
-                <Textarea
-                  id="message"
-                  name="message"
-                  required
-                  placeholder="Tell me about your project…"
-                />
-              </div>
-              <Button
-                type="submit"
-                variant="gradient"
-                size="lg"
-                disabled={status === "sending"}
-                className="mt-1 w-full"
-              >
-                {status === "sent" ? (
-                  <>
-                    <Check className="h-4 w-4" /> Opening your email…
-                  </>
-                ) : (
-                  <>
-                    <Send className="h-4 w-4" /> Send message
-                  </>
-                )}
-              </Button>
-              <motion.p
-                initial={false}
-                animate={{ opacity: status === "sent" ? 1 : 0 }}
-                className="text-center text-xs text-muted"
-              >
-                Thanks! Your email client should have opened.
-              </motion.p>
-            </div>
-          </form>
-        </Reveal>
+            <span className="pill__face">
+              {l.label}
+              <ArrowUpRight className="arrow h-4 w-4" aria-hidden />
+            </span>
+          </a>
+        ))}
+        <a href={siteConfig.resume} download className="pill pill--ink">
+          <span className="pill__face">
+            <FileText className="h-4 w-4" aria-hidden /> Resume
+          </span>
+        </a>
       </div>
+
+      <footer className="mt-auto flex flex-col gap-2 border-t border-white/20 py-8 text-sm text-paper/60 sm:flex-row sm:justify-between sm:pr-16 lg:justify-start lg:gap-12 lg:pr-0">
+        <p>
+          © {new Date().getFullYear()} {siteConfig.name}
+        </p>
+        <div className="flex items-center gap-6">
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("mascot:dress"))}
+            className="hidden underline-offset-4 hover:text-paper hover:underline lg:inline"
+          >
+            Dress me up
+          </button>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("mascot:trick"))}
+            className="hidden underline-offset-4 hover:text-paper hover:underline lg:inline"
+          >
+            Do a trick
+          </button>
+          <p>{siteConfig.location}</p>
+        </div>
+      </footer>
     </section>
   );
 }

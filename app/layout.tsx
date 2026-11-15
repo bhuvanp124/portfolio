@@ -1,15 +1,26 @@
 import type { Metadata, Viewport } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
+import { Funnel_Display, Hanken_Grotesk } from "next/font/google";
 
 import "@/styles/globals.css";
 
 import { BackToTop } from "@/components/back-to-top";
 import { CommandPalette } from "@/components/command-palette";
-import { Loader } from "@/components/loader";
-import { MouseSpotlight } from "@/components/effects/mouse-spotlight";
-import { ScrollProgress } from "@/components/scroll-progress";
 import { siteConfig } from "@/lib/site";
+
+const funnel = Funnel_Display({
+  subsets: ["latin"],
+  weight: ["300", "400", "600"],
+  variable: "--font-funnel",
+  display: "swap",
+});
+
+const grotesk = Hanken_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-grotesk",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -49,8 +60,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#09090B",
-  colorScheme: "dark",
+  themeColor: "#2457f5",
   width: "device-width",
   initialScale: 1,
 };
@@ -77,7 +87,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${GeistMono.variable} dark scroll-smooth`}
+      className={`${GeistSans.variable} ${GeistMono.variable} ${funnel.variable} ${grotesk.variable} dark scroll-smooth`}
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background font-sans">
@@ -89,9 +99,6 @@ export default function RootLayout({
           Skip to content
         </a>
 
-        <Loader />
-        <ScrollProgress />
-        <MouseSpotlight />
         <CommandPalette />
 
         {children}

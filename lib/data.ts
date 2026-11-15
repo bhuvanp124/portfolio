@@ -32,11 +32,19 @@ import { siteConfig } from "@/lib/site";
 
 export const navItems: NavItem[] = [
   { label: "About", href: "#about" },
+  { label: "Work", href: "#projects" },
   { label: "Skills", href: "#skills" },
   { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-  { label: "Achievements", href: "#achievements" },
+  { label: "Recognition", href: "#achievements" },
   { label: "Contact", href: "#contact" },
+];
+
+/** Words cycled through in the hero headline: "I build ___". */
+export const heroWords = [
+  "Android apps",
+  "AI platforms",
+  "fast systems",
+  "web apps",
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -177,6 +185,73 @@ export const projects: Project[] = [
     ],
     github: siteConfig.handles.github,
     featured: true,
+    highlights: [
+      {
+        title: "10k+ requests/sec",
+        text: "Handles over ten thousand concurrent requests every second while adding minimal latency overhead to each one.",
+      },
+      {
+        title: "Smart routing",
+        text: "Round-Robin and Least-Connection algorithms spread traffic evenly across backend server clusters.",
+      },
+      {
+        title: "99.9% availability",
+        text: "Active health checks pull failing servers out of the pool and fail over automatically during outages.",
+      },
+    ],
+    scene: {
+      color: "#f6c7a7",
+      accent: "#c2410c",
+      window: "lb · bash",
+      outfit: 2,
+      steps: [
+        {
+          lines: [
+            "$ ./lb --algo least-conn --workers 8",
+            "loaded 4 upstreams from lb.conf",
+            "epoll: non-blocking accept loop ready",
+            "listening on :8080",
+            "▲ 10,000+ concurrent req/s",
+          ],
+          card: {
+            label: "Layer 7 · C++",
+            title: "10k+ requests a second",
+            sub: "non-blocking I/O, multithreaded",
+          },
+          say: "This is my *load balancer*, written from scratch in C++.",
+        },
+        {
+          lines: [
+            "req 4211  GET /api/cart   → 10.0.0.11  (conns 3)",
+            "req 4212  GET /api/items  → 10.0.0.13  (conns 2)",
+            "req 4213  POST /api/pay   → 10.0.0.12  (conns 2)",
+            "req 4214  GET /api/items  → 10.0.0.13  (conns 3)",
+            "algo: least-connection",
+          ],
+          card: {
+            label: "Routing",
+            title: "Round-robin & least-connection",
+            sub: "chosen per pool",
+          },
+          say: "It spreads traffic with *round-robin* or *least-connection* routing.",
+        },
+        {
+          lines: [
+            "✓ health  10.0.0.11  200  1.2ms",
+            "✗ health  10.0.0.14  timeout → removed from pool",
+            "  traffic rerouted to 3 healthy upstreams",
+            "✓ health  10.0.0.14  200 → restored",
+            "▲ 99.9% availability",
+          ],
+          card: {
+            label: "Failover",
+            title: "99.9% availability",
+            sub: "active health checks",
+          },
+          say: "When a server dies, it notices and *routes around it*.",
+        },
+      ],
+    },
   },
   {
     title: "Adaptive Interview Training Platform",
@@ -193,6 +268,73 @@ export const projects: Project[] = [
     ],
     github: siteConfig.handles.github,
     featured: true,
+    highlights: [
+      {
+        title: "Adaptive questions",
+        text: "Every follow-up is generated from the candidate's previous answer instead of coming from a fixed question bank.",
+      },
+      {
+        title: "Live feedback",
+        text: "A real-time loop with NLP and OpenCV reads sentiment and facial expressions during the session.",
+      },
+      {
+        title: "Built for scale",
+        text: "Deployed on AWS EC2 and S3 behind REST APIs, keeping latency low for many concurrent users.",
+      },
+    ],
+    scene: {
+      color: "#c4b5f4",
+      accent: "#5b3fd1",
+      window: "interview · session",
+      outfit: 1,
+      steps: [
+        {
+          lines: [
+            "> candidate: \"I'd use a hash map for lookups.\"",
+            "llm  reading answer…",
+            "llm  → \"What happens when two keys collide?\"",
+            "llm  difficulty adjusted: medium → hard",
+            "✓ question 4 of 10",
+          ],
+          card: {
+            label: "LLM",
+            title: "Questions that adapt",
+            sub: "each follow-up reads your last answer",
+          },
+          say: "An *AI interviewer* that asks follow-ups based on your answers.",
+        },
+        {
+          lines: [
+            "cv   frame 1820  face detected",
+            "cv   expression: focused",
+            "nlp  sentiment: confident (0.82)",
+            "nlp  filler words: 2",
+            "✓ feedback updated live",
+          ],
+          card: {
+            label: "Real-time feedback",
+            title: "Sentiment + expression",
+            sub: "NLP and OpenCV on every answer",
+          },
+          say: "It reads *sentiment* and *facial expression* while you talk.",
+        },
+        {
+          lines: [
+            "$ aws ec2 describe-instances --filter app=interview",
+            "i-0a3f…  running  t3.medium",
+            "s3   sessions/ → 1,204 recordings",
+            "api  POST /answer  → 200",
+            "✓ deployed",
+          ],
+          card: {
+            label: "Deployed on",
+            title: "AWS EC2 + S3",
+            sub: "behind low-latency REST APIs",
+          },
+          say: "And it runs on *AWS*, behind low-latency REST APIs.",
+        },
+      ],
+    },
   },
   {
     title: "Crypto Quant Backtesting Engine",
@@ -209,6 +351,73 @@ export const projects: Project[] = [
     ],
     github: siteConfig.handles.github,
     featured: true,
+    highlights: [
+      {
+        title: "Event-driven core",
+        text: "Treats market data as a stream of events, replaying minute-level OHLCV bars the way a live strategy would see them.",
+      },
+      {
+        title: "60% faster",
+        text: "Signal generation and processing rewritten with vectorized NumPy operations instead of Python loops.",
+      },
+      {
+        title: "Risk-validated",
+        text: "Sharpe Ratio and Max Drawdown statistically test every strategy before it is trusted with live money.",
+      },
+    ],
+    scene: {
+      color: "#a9e4cf",
+      accent: "#0f766e",
+      window: "backtest · python",
+      outfit: 4,
+      steps: [
+        {
+          lines: [
+            "$ python run.py --pair BTC-USD --tf 1m",
+            "loading minute-level OHLCV … done",
+            "event  BAR    09:31  close 67,412.5",
+            "event  SIGNAL long   size 0.25",
+            "event  FILL   09:31  67,418.0",
+          ],
+          card: {
+            label: "Event-driven",
+            title: "Minute-level OHLCV",
+            sub: "HFT strategies replayed bar by bar",
+          },
+          say: "A *backtesting engine* for high-frequency crypto strategies.",
+        },
+        {
+          lines: [
+            "profile  loop version",
+            "  ████████████████████  100%",
+            "profile  vectorized NumPy",
+            "  ████████              40%",
+            "▲ 60% faster execution",
+          ],
+          card: {
+            label: "Vectorized",
+            title: "60% faster",
+            sub: "NumPy instead of Python loops",
+          },
+          say: "Rewriting the hot path in NumPy made it *60% faster*.",
+        },
+        {
+          lines: [
+            "risk report",
+            "  sharpe ratio      ✓ computed",
+            "  max drawdown      ✓ computed",
+            "  exposure by hour  ✓ computed",
+            "✓ strategy validated",
+          ],
+          card: {
+            label: "Risk",
+            title: "Sharpe ratio · max drawdown",
+            sub: "every strategy gets a risk report",
+          },
+          say: "Every strategy gets a *risk report* before I trust it.",
+        },
+      ],
+    },
   },
   {
     title: "Car Parts Marketplace",
@@ -224,6 +433,58 @@ export const projects: Project[] = [
     ],
     github: siteConfig.handles.github,
     featured: true,
+    highlights: [
+      {
+        title: "Search & filters",
+        text: "Product listings with search and filtering, so buyers can find the right part quickly.",
+      },
+      {
+        title: "Accounts",
+        text: "User authentication and accounts for the people buying and selling parts.",
+      },
+      {
+        title: "Cart & checkout",
+        text: "A complete cart and checkout flow, built across Next.js, Express and PostgreSQL.",
+      },
+    ],
+    scene: {
+      color: "#f3e28a",
+      accent: "#8a6d00",
+      window: "marketplace · api",
+      outfit: 3,
+      steps: [
+        {
+          lines: [
+            "GET   /api/parts?q=brake+pads&make=honda",
+            "200   listings returned",
+            "GET   /api/parts/1182",
+            "200   { title, price, seller, photos }",
+            "✓ search + filters",
+          ],
+          card: {
+            label: "Full stack",
+            title: "Next.js · Express · PostgreSQL",
+            sub: "listings, search and filtering",
+          },
+          say: "A *marketplace* for buying and selling car parts.",
+        },
+        {
+          lines: [
+            "POST  /api/auth/login        → 200",
+            "POST  /api/cart  { partId: 1182, qty: 2 }",
+            "201   cart updated",
+            "POST  /api/checkout          → 201",
+            "✓ order created",
+          ],
+          card: {
+            label: "Accounts & checkout",
+            title: "Cart to order, end to end",
+            sub: "auth, cart and checkout flow",
+          },
+          say: "With accounts, a cart and a *checkout flow*, end to end.",
+        },
+      ],
+    },
   },
   {
     title: "3D Car Visualizer",

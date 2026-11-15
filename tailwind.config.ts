@@ -23,6 +23,15 @@ const config: Config = {
         muted: "hsl(var(--muted))",
         border: "hsl(var(--border))",
         ring: "hsl(var(--ring))",
+        // Light "paper" palette used by the home page.
+        paper: "#f7f7f2",
+        mist: "#ebebe5",
+        ink: "#0b0b0c",
+        navy: "#0b2740",
+        cobalt: {
+          DEFAULT: "#2457f5",
+          light: "#6f93ff",
+        },
         brand: {
           DEFAULT: "#3B82F6", // primary accent
           secondary: "#7C3AED", // secondary accent
@@ -31,6 +40,8 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-geist-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
+        display: ["var(--font-funnel)", "Helvetica Neue", "Arial", "sans-serif"],
+        grotesk: ["var(--font-grotesk)", "Helvetica Neue", "Arial", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -67,6 +78,10 @@ const config: Config = {
         "intro-out": {
           to: { opacity: "0", visibility: "hidden" },
         },
+        rise: {
+          from: { transform: "translateY(105%)" },
+          to: { transform: "translateY(0)" },
+        },
         "drop-in": {
           from: { opacity: "0", transform: "translateY(-80px)" },
           to: { opacity: "1", transform: "translateY(0)" },
@@ -79,6 +94,7 @@ const config: Config = {
         shimmer: "shimmer 2s infinite",
         "spin-slow": "spin-slow 14s linear infinite",
         "intro-out": "intro-out 0.35s ease-in-out 0.15s forwards",
+        rise: "rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) both",
         "drop-in": "drop-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both",
       },
     },

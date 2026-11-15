@@ -194,13 +194,13 @@ function Scene({ project, index }: { project: Project; index: number }) {
                   className="absolute inset-0 translate-x-1.5 translate-y-1.5 rounded-2xl [background:radial-gradient(circle,#0b0b0c_0.95px,transparent_1.15px)_0_0/3px_3px]"
                 />
                 <div className="relative rounded-2xl bg-paper px-5 py-4 shadow-[0_24px_40px_-24px_rgba(11,11,12,0.45)]">
-                  <p className="text-[0.68rem] font-medium uppercase tracking-[0.14em] text-ink/50">
+                  <p className="text-[0.68rem] font-medium uppercase tracking-[0.14em] text-ink/65">
                     {card.label}
                   </p>
                   <p className="display mt-1.5 text-[1.3rem] leading-[1.05] tracking-[-0.03em]">
                     {card.title}
                   </p>
-                  {card.sub && <p className="mt-1 text-[0.82rem] text-ink/55">{card.sub}</p>}
+                  {card.sub && <p className="mt-1 text-[0.82rem] text-ink/70">{card.sub}</p>}
                 </div>
               </div>
             </div>

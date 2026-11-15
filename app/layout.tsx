@@ -10,8 +10,8 @@ import { CommandPalette } from "@/components/command-palette";
 import { siteConfig } from "@/lib/site";
 
 const funnel = Funnel_Display({
+  // Variable font: one file covers the 300–600 weights the design uses.
   subsets: ["latin"],
-  weight: ["300", "400", "600"],
   variable: "--font-funnel",
   display: "swap",
 });

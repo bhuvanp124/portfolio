@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, Check, Copy, FileText } from "lucide-react";
+import { ArrowUpRight, Check, Copy, FileText, Phone } from "lucide-react";
 import { useState } from "react";
 
 import { siteConfig } from "@/lib/site";
@@ -83,6 +83,13 @@ export function Contact() {
         <p>
           © {new Date().getFullYear()} {siteConfig.name}
         </p>
+        <a
+          href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
+          className="inline-flex items-center gap-2 font-medium text-paper underline-offset-4 hover:underline"
+        >
+          <Phone className="h-4 w-4" aria-hidden />
+          {siteConfig.phone}
+        </a>
         <div className="flex items-center gap-6">
           <button
             type="button"

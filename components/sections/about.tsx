@@ -81,10 +81,9 @@ export function About() {
 
         <dl className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-ink/10 bg-ink/10 sm:grid-cols-4">
           {about.stats.map((s) => (
-            <div key={s.label} className="bg-paper px-5 py-6">
-              <dt className="sr-only">{s.label}</dt>
+            <div key={s.label} className="flex flex-col-reverse bg-paper px-5 py-6">
+              <dt className="mt-2 text-xs text-ink/70">{s.label}</dt>
               <dd className="display text-[2.2rem] tracking-[-0.04em]">{s.value}</dd>
-              <p className="mt-2 text-xs text-ink/55">{s.label}</p>
             </div>
           ))}
         </dl>

@@ -109,7 +109,14 @@ export default function Mascot() {
     const hit = hitRef.current!;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+    // WebGL can be missing or disabled; without it, the character simply
+    // doesn't appear rather than throwing and taking the page down.
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+    } catch {
+      return;
+    }
     renderer.setClearColor(0x000000, 0);
     const dpr = Math.min(window.devicePixelRatio, 2);
     renderer.setPixelRatio(dpr);
